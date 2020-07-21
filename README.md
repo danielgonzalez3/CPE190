@@ -1,3 +1,3 @@
 # CPE190
 
-#TODO: Write Projec Thesis here.
+#TODO: Write Project Thesis here.
