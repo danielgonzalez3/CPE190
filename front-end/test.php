@@ -4,6 +4,10 @@
 Daniel Gonzalez
 CPE 190 Project
  */
+
+echo "<h2>THIS IS NOT A TOTAL PIECE OF SHIT</h2>";
+
+
 $onoroff = $_GET["state"]; // Declares the request from index.html as a variable
 
 $textfile = "L.txt"; // Declares the name and location of the .txt file

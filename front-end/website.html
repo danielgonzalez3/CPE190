@@ -1,43 +1,77 @@
-<!--
-CPE 190
-Project Fumigate
- */-->
+<!--CPE 190 Project */-->
 <html>
 <head>
+<style>
+div.controls {
+  position: absolute;
+  right:150px;
+  width: 355px;
+  height: 395px;
+  border: 2px solid white;
+}
+div.video {
+  position: absolute;
+  left:150px;
+  width: 645px;
+  height: 485px;
+  border: 2px solid white 
+}
+
+</style>
 <title>Project</title>
-		<link rel="stylesheet" href="css/bootstrap.css">
-		<link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
 </head>
 <body>
 <div class="container">
-
-    
-	<h1 align="center">CPE 190 V1.1</h1>
+	<h1 align="center">CPE 190 V1.2</h1>
 	</br>
 	<div class="jumbotron">
-			<div align="center">
-				<font size="5">
-                    <!-- Logo -->
-                    </br>
-                    <img src="logo.png" alt="Sac" align "center" style="width:617px;height:248px;">	
-                    </br>
-                    <!-- Logo -->
-	 				<label>Control</label>
-	 				</br>
-                     <img src="control.png" alt="Sac" align "center" style="width:525px;height:375px;">	
-                     <video src="test.mpeg" width="640" height="480" controls></video>
-    
-                    <!--  Left and right -->
-				<!--	<div class="btn-group btn-group-justified"> -->
-	  	<!--				<!-- Link Which send a request to php --> 
-	  	<!--				<a href="L.php?state=1" class="btn btn-Info">L</a> -->
-	  	<!--				<a href="L.php?state=0" class="btn btn-Info">R</a> -->
-    
-					</div>  
-                    </font>
-		    </div>
-		</div>
-	</div>
+            <font size="5">
+                
+                <!-- Header -->
+                <div align="center">
+                    <img src="logo.png" alt="logo" style="width:617px;height:248px;" >	
+                </div>
+                
+                <!-- Video 
+                <video src="test.mpeg" align="left" width="640" height="480" controls></video> 
+                -->
+                
+                <!-- controls
+                <img class ="moveimage" img src="control.png" alt="control" align="right" style="width:350px;height:390px;">	
+                -->
+                </br>
+                
+                <div class="video">
+                    <video src="test.mpeg" align="center" width="640" height="480" controls></video> 
+                </div>
+               
+                <div class="controls">
+                    <background-image: url('control.png'); alt="control" align="center" style="width:350px;height:390px;">
+                    
+                    <b1 class="button_up" >
+                        <button type="submit" href="test.php" style="display: block;width:50px;height:50px;" formaction="/test.php"></button>
+                    </b1>
+                    
+                    <b2 class="button_left" >
+                        <input type="submit" style="display: block;width:50px;height:50px;" value="L" href="test.php">
+                    </b2>
+                        
+                    <b3 class="button_right" >
+                        <input type="submit" style="display: block;width:50px;height:50px;" value="R">
+                    </b3>
+                    
+                    <b4 class="button_down" >
+                        <input type="submit" style="display: block;width:50px;height:50px;" value="D">
+                    </b4>
+                        
+                </div>
+                </br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
+            </font>
+        </div>
+    </div>
+</div>
 
 </body>
 
