@@ -1,22 +1,22 @@
 <!--CPE 190 Project */-->
 <html>
-<head>
 <style>
-div.controls {
-  position: absolute;
-  right:150px;
-  width: 355px;
-  height: 395px;
-  border: 2px solid white;
-}
-div.video {
-  position: absolute;
-  left:150px;
-  width: 430px;
-  height: 320px;
-  border: 2px solid white 
-}
+	div.controls {
+	  position: absolute;
+	  right:150px;
+	  width: 355px;
+	  height: 395px;
+	  border: 2px solid white;
+	}
+	div.video {
+	  position: absolute;
+	  left:150px;
+	  width: 430px;
+	  height: 320px;
+	  border: 2px solid white 
+	}
 </style>
+<head>
 <title>Project</title>
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
@@ -27,38 +27,37 @@ div.video {
         <img src="shield.png" alt="Shield" align="center" style="width:48px;height:60px;">
     </h1>
 	<div class="jumbotron">
-            <font size="5">
-                </br>
-                <div class="video">
-                    <video src="temp.mp4" align="center" width="426" height="320" controls></video> 
-                </div>
-               
-                <div class="controls">
-                    <img src="control.png"; alt="control" align="center" style="width:350px;height:390px;">
-                    
-                    <b1 class="button_up" >
-                        <button type="submit" href="test.php" style="display: block;width:40px;height:40px;" formaction="/var/www/html/CPE190/front-end/test.php"></button>
-                    </b1>
-                    
-                    <b2 class="button_left" >
-                        <input type="submit" style="display: block;width:40px;height:40px;" value="L" href="/var/www/html/CPE190/front-end/test.php">
-                    </b2>
-                        
-                    <b3 class="button_right" >
-                        <input type="submit" style="display: block;width:40px;height:40px;" value="R">
-                    </b3>
-                    
-                    <b4 class="button_down" >
-                        <input type="submit" style="display: block;width:40px;height:40px;" value="D">
-                    </b4>
-                        
-                </div>
-                </br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
-            </font>
-        </div>
+		<font size="5">
+			<div class="video">
+				<video src="temp.mp4" align="center" width="426" height="320" controls></video>
+			</div>
+			<div class="controls">
+				<img src="control.png"; alt="control" align="center" style="width:350px;height:390px;">
+				<b1 class="button_up">
+					<div class="btn-group btn-group-justified">
+						<a href="test.php?state=1" style="display:block;width:40px;height:40px;background:transparent;border:none;color:transparent" class="btn btn-primary"></a>
+					</div>
+				</b1>
+				<b2 class="button_left">
+					<div class="btn-group btn-group-justified">
+						<a href="test.php?state=4" style="display:block;width:40px;height:40px;background:transparent;border:none;color:transparent" class="btn btn-primary"></a>
+					</div>
+				</b2>
+				<b3 class="button_right">
+					<div class="btn-group btn-group-justified">
+						<a href="test.php?state=2" style="display:block;width:40px;height:40px;background:transparent;border:none;color:transparent" class="btn btn-primary"></a>
+					</div>
+				</b3>
+				<b4 class="button_down">
+					<div class="btn-group btn-group-justified">
+						<a href="test.php?state=3" style="display:block;width:40px;height:40px;background:transparent;border:none;color:transparent" class="btn btn-primary"></a>
+					</div>
+				</b4>
+			</div>
+			<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		</font>           
     </div>
 </div>
-
 </body>
-
 </html>
+

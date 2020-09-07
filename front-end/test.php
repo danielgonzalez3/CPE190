@@ -1,27 +1,19 @@
 <?php
-
-/* 
-Daniel Gonzalez
-CPE 190 Project
- */
-
-echo "<h2>Test</h2>";
-
-
-$input = $_GET["state"]; // Declares the request from index.html as a variable
-
-$textfile = "input.txt"; // Declares the name and location of the .txt file
- 
-$fileLocation = "$textfile";
-
-$fh = fopen($fileLocation, 'w   ') or die("Error"); // Opens up the .txt file for writing and replaces any previous content
-
-$stringToWrite = "$input"; // Write either 1 or 0 depending on request from html
-
-fwrite($fh, $stringToWrite); // Writes it to the .txt file
-
-fclose($fh); 
- 
-header("Location: website.html"); // Return to frontend (index.html)
-
+    //Daniel Gonzalez
+    //CPE190
+    $input = $_GET["state"];
+    $writer = new XMLWriter();
+    echo $input;
+    $writer->openURI('data.xml');
+    $writer->startDocument('1.0','utf-8');   
+    $writer->setIndent(4);
+    $writer->startElement('controlState');
+    $writer->writeElement('nextState', $input);
+    $writer->writeElement('OStime', time());
+    $writer->endElement();
+    $writer->endElement();
+    $writer->endDocument();
+    $writer->flush();
+    header('Location: website.html');
 ?>
+
