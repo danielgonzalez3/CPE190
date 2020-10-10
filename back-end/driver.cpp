@@ -13,15 +13,18 @@ void stripTags( string &text );
 
 int main() 
 {
-   string filename = "/var/www/html/CPE190/front-end/data.xml";
-   string tag = "controlState";
-   bool stripOtherTags = true;
-   string text = getFile( filename );
-   vector<string> all = getData( text, tag );
-   for ( string &s : all ) 
-   {
-      if ( stripOtherTags ) stripTags( s );
-      cout << s << '\n';
+   while(1) 
+   {		
+      string filename = "/var/www/html/CPE190/front-end/data.xml";
+      string tag = "controlState";
+      bool stripOtherTags = true;
+      string text = getFile( filename );
+      vector<string> all = getData( text, tag );
+      for ( string &s : all ) 
+      {
+         if ( stripOtherTags ) stripTags( s );
+         cout << s << '\n';
+      }
    }
 }
 
