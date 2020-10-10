@@ -3,7 +3,6 @@
     //CPE190
     $input = $_GET["state"];
     $writer = new XMLWriter();
-    echo $input;
     $writer->openURI('data.xml');
     $writer->startDocument('1.0','utf-8');   
     $writer->setIndent(4);
