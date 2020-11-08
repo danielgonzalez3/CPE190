@@ -7,7 +7,6 @@ Daniel Gonzalez
 #include <vector>
 #include <cstdlib>
 #include <wiringPi.h>
-#include <csignal>
 
 using namespace std;
 string getFile( string filename );                         // Reads whole file into a string buffer
@@ -30,7 +29,15 @@ int main()
          cout << s << '\n';
          state = s.at(2)-'0';
       }
-      
+      wiringPiSetupGpio();
+      //State 1
+      if (state == 1)
+      {
+         pinMode(17, OUTPUT);
+         digitalWrite(17, HIGH);
+         delay(1);
+         digitalWrite(17, LOW);
+      }
    }
 }
 
