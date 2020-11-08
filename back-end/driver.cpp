@@ -6,10 +6,14 @@ Daniel Gonzalez
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <wiringPi.h>
+#include <csignal>
+
 using namespace std;
 string getFile( string filename );                         // Reads whole file into a string buffer
 vector<string> getData( const string &text, string tag );  // Gets collection of items between given tags
 void stripTags( string &text ); 
+int state;
 
 int main() 
 {
@@ -20,11 +24,13 @@ int main()
       bool stripOtherTags = true;
       string text = getFile( filename );
       vector<string> all = getData( text, tag );
-      for ( string &s : all ) 
+      for (string &s : all) 
       {
-         if ( stripOtherTags ) stripTags( s );
+         if (stripOtherTags) stripTags(s);
          cout << s << '\n';
+         state = s.at(2)-'0';
       }
+      
    }
 }
 
