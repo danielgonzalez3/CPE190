@@ -114,6 +114,9 @@ video = cv2.VideoCapture(VIDEO_PATH)
 imW = video.get(cv2.CAP_PROP_FRAME_WIDTH)
 imH = video.get(cv2.CAP_PROP_FRAME_HEIGHT)
 
+# Define the codec and create VideoWriter object.The output is stored in 'output.avi' file.
+out = cv2.VideoWriter('output.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (frame_width,frame_height))
+
 while(video.isOpened()):
 
     # Acquire frame and resize to expected shape [1xHxWx3]
@@ -162,7 +165,9 @@ while(video.isOpened()):
 
     # All the results have been drawn on the frame, so it's time to display it.
     #cv2.imshow('Object detector', frame)
-     
+    
+    # Write the frame into the file 'output.avi'
+    out.write(frame)
     
     # Press 'q' to quit
     if cv2.waitKey(1) == ord('q'):
