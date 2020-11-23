@@ -161,8 +161,9 @@ while(video.isOpened()):
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2) # Draw label text
 
     # All the results have been drawn on the frame, so it's time to display it.
-    cv2.imshow('Object detector', frame)
-
+    #cv2.imshow('Object detector', frame)
+     
+    
     # Press 'q' to quit
     if cv2.waitKey(1) == ord('q'):
         break
