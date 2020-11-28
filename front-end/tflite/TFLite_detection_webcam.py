@@ -156,7 +156,7 @@ freq = cv2.getTickFrequency()
 
 # Below VideoWriter object will create 
 # a frame of above defined The output  
-# is stored in 'filename.avi' file. 
+# is stored in 'out.avi' file. 
 result = cv2.VideoWriter('out.avi',  
 cv2.VideoWriter_fourcc(*'MJPG'), 10, resolution) 
 
