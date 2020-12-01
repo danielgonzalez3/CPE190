@@ -200,12 +200,12 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} /var/www/html/CPE190/back-end/bcm2835-1.58/missing aclocal-1.16
+ACLOCAL = ${SHELL} /var/www/html/CPE190/back-end/bcm2835-1.68/missing aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /var/www/html/CPE190/back-end/bcm2835-1.58/missing autoconf
-AUTOHEADER = ${SHELL} /var/www/html/CPE190/back-end/bcm2835-1.58/missing autoheader
-AUTOMAKE = ${SHELL} /var/www/html/CPE190/back-end/bcm2835-1.58/missing automake-1.16
+AUTOCONF = ${SHELL} /var/www/html/CPE190/back-end/bcm2835-1.68/missing autoconf
+AUTOHEADER = ${SHELL} /var/www/html/CPE190/back-end/bcm2835-1.68/missing autoheader
+AUTOMAKE = ${SHELL} /var/www/html/CPE190/back-end/bcm2835-1.68/missing automake-1.16
 AWK = mawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
@@ -228,26 +228,26 @@ LDFLAGS =
 LIBOBJS = 
 LIBS = -lrt 
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /var/www/html/CPE190/back-end/bcm2835-1.58/missing makeinfo
+MAKEINFO = ${SHELL} /var/www/html/CPE190/back-end/bcm2835-1.68/missing makeinfo
 MKDIR_P = /bin/mkdir -p
 OBJEXT = o
 PACKAGE = bcm2835
 PACKAGE_BUGREPORT = mikem@airspayce.com
 PACKAGE_NAME = bcm2835
-PACKAGE_STRING = bcm2835 1.58
+PACKAGE_STRING = bcm2835 1.68
 PACKAGE_TARNAME = bcm2835
 PACKAGE_URL = 
-PACKAGE_VERSION = 1.58
+PACKAGE_VERSION = 1.68
 PATH_SEPARATOR = :
 RANLIB = ranlib
 SET_MAKE = 
 SHELL = /bin/bash
 STRIP = 
-VERSION = 1.58
-abs_builddir = /var/www/html/CPE190/back-end/bcm2835-1.58
-abs_srcdir = /var/www/html/CPE190/back-end/bcm2835-1.58
-abs_top_builddir = /var/www/html/CPE190/back-end/bcm2835-1.58
-abs_top_srcdir = /var/www/html/CPE190/back-end/bcm2835-1.58
+VERSION = 1.68
+abs_builddir = /var/www/html/CPE190/back-end/bcm2835-1.68
+abs_srcdir = /var/www/html/CPE190/back-end/bcm2835-1.68
+abs_top_builddir = /var/www/html/CPE190/back-end/bcm2835-1.68
+abs_top_srcdir = /var/www/html/CPE190/back-end/bcm2835-1.68
 ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
@@ -266,7 +266,7 @@ host_alias =
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /var/www/html/CPE190/back-end/bcm2835-1.58/install-sh
+install_sh = ${SHELL} /var/www/html/CPE190/back-end/bcm2835-1.68/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -779,7 +779,7 @@ uninstall-am:
 
 
 upload:
-	rsync -avz bcm2835-1.58.tar.gz doc/html/ www.airspayce.com:public_html/mikem/bcm2835
+	rsync -avz bcm2835-1.68.tar.gz doc/html/ www.airspayce.com:public_html/mikem/bcm2835
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

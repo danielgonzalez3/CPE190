@@ -49,42 +49,27 @@ int main(int argc, char **argv) {
 
 	servo.Dump();
 
-	puts("");
+	puts("testing...");
+	
+        servo.SetAngle(CHANNEL(4), ANGLE(90));
+	servo.SetAngle(CHANNEL(5), ANGLE(90));
+	servo.SetAngle(CHANNEL(6), ANGLE(90));
+	servo.SetAngle(CHANNEL(7), ANGLE(90));
 
-	servo.SetAngle(CHANNEL(0), ANGLE(90));
-	servo.SetAngle(CHANNEL(1), ANGLE(90));
-	servo.SetAngle(CHANNEL(2), ANGLE(90));
-	servo.SetAngle(CHANNEL(3), ANGLE(90));
-
-	puts("Servo 0:90  Servo 1:90");
-	puts("Servo 2:90  Servo 3:90");
-
-	sleep(4);
+	sleep(1);
 
 	for (;;) {
-		servo.SetAngle(CHANNEL(0), ANGLE(90));
-		servo.SetAngle(CHANNEL(1), ANGLE(0));
-		servo.SetAngle(CHANNEL(2), ANGLE(0));
-		servo.SetAngle(CHANNEL(3), ANGLE(0));
-		puts("");
-		puts("Servo 0:90  Servo 1:0");
-		puts("Servo 2:0  Servo 3:0");
+		puts("set to zero");
+	        servo.SetAngle(CHANNEL(4), ANGLE(0));
+		servo.SetAngle(CHANNEL(5), ANGLE(0));
+		servo.SetAngle(CHANNEL(6), ANGLE(0));
+		servo.SetAngle(CHANNEL(7), ANGLE(0));
 		sleep(2);
-		servo.SetAngle(CHANNEL(0), ANGLE(180));
-		servo.SetAngle(CHANNEL(1), ANGLE(180));
-		servo.SetAngle(CHANNEL(2), ANGLE(90));
-		servo.SetAngle(CHANNEL(3), ANGLE(90));
-		puts("");
-		puts("Servo 0:180 Servo 1:180");
-		puts("Servo 2:90  Servo 3:90");
-		sleep(2);
-		servo.SetAngle(CHANNEL(0), ANGLE(0));
-		servo.SetAngle(CHANNEL(1), ANGLE(90));
-		servo.SetAngle(CHANNEL(2), ANGLE(180));
-		servo.SetAngle(CHANNEL(3), ANGLE(180));
-		puts("");
-		puts("Servo 0:0   Servo 1:90");
-		puts("Servo 2:180  Servo 3:180");
+		puts("set to 90");
+		servo.SetAngle(CHANNEL(4), ANGLE(90));
+		servo.SetAngle(CHANNEL(5), ANGLE(90));
+		servo.SetAngle(CHANNEL(6), ANGLE(90));
+		servo.SetAngle(CHANNEL(7), ANGLE(90));
 		sleep(2);
 	}
 
