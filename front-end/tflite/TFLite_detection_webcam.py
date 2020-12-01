@@ -154,6 +154,12 @@ input_std = 127.5
 frame_rate_calc = 1
 freq = cv2.getTickFrequency()
 
+# Below VideoWriter object will create 
+# a frame of above defined The output  
+# is stored in 'out.avi' file. 
+result = cv2.VideoWriter('out.avi',  
+cv2.VideoWriter_fourcc(*'MJPG'), 10, resolution) 
+
 # Initialize video stream
 videostream = VideoStream(resolution=(imW,imH),framerate=30).start()
 time.sleep(1)
@@ -211,6 +217,10 @@ while True:
     # Draw framerate in corner of frame
     cv2.putText(frame,'FPS: {0:.2f}'.format(frame_rate_calc),(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
 
+    # Write the frame into the 
+    # file 'out.avi' 
+    result.write(frame)
+	
     # All the results have been drawn on the frame, so it's time to display it.
     cv2.imshow('Object detector', frame)
 
@@ -224,5 +234,9 @@ while True:
         break
 
 # Clean up
-cv2.destroyAllWindows()
 videostream.stop()
+result.release()
+cv2.destroyAllWindows()
+
+
+print("The video was successfully saved") 
