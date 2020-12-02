@@ -30,8 +30,8 @@
 #include "bcm2835.h"
 #include "pca9685servo.h"
 
-#define M1P1 RPI_V2_GPIO_P1_32
-#define M1P2 RPI_V2_GPIO_P1_36
+#define M1P1 RPI_BPLUS_GPIO_J8_36
+#define M1P2 RPI_BPLUS_GPIO_J8_32
 
 int main(int argc, char **argv) {	
 	if (getuid() != 0) {
