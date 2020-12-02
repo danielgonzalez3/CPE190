@@ -30,11 +30,10 @@
 #include "bcm2835.h"
 #include "pca9685servo.h"
 
+#define M1P1 RPI_V2_GPIO_P1_32
+#define M1P2 RPI_V2_GPIO_P1_36
 
-int main(int argc, char **argv) {
-	#define M1P1 RPI_V2_GPIO_P1_32
-	#define M1P2 RPI_V2_GPIO_P1_36
-	
+int main(int argc, char **argv) {	
 	if (getuid() != 0) {
 		fprintf(stderr, "Program is not started as \'root\' (sudo)\n");
 		return -1;
