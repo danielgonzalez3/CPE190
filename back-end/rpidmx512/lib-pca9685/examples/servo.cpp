@@ -30,11 +30,8 @@
 #include "bcm2835.h"
 #include "pca9685servo.h"
 
-int M1_PIN1 = 12;
-int M1_PIN2 = 16;
-
-#define M1P1 RPI_GPIO_P1_32
-#define M1P2 RPI_GPIO_P1_36
+#define RPI_V2_GPIO_P1_32
+#define RPI_V2_GPIO_P1_36
 
 int main(int argc, char **argv) {
 	if (getuid() != 0) {
