@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
 	bcm2835_gpio_fsel(M1P2, BCM2835_GPIO_FSEL_OUTP);
 	
 	//pca9685 set freq
-	//pca9685.SetFrequency(100);
+	pca9685.SetFrequency(100);
 	
 	servo.Dump();
 
