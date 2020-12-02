@@ -73,12 +73,10 @@ int main(int argc, char **argv) {
 	puts("Turning on motor");
 	bcm2835_gpio_write(M1P1, HIGH);
         bcm2835_gpio_write(M1P2, LOW);
-	pca9685.SetFrequency(100);
 	pca9685.Write(CHANNEL(0), VALUE(819)); 	
 	
 	//sleep(15);
 	bcm2835_gpio_write(M1P1, LOW);
-	pca9685.SetFrequency(0);
 	
 	puts("Testing servos");
 	
