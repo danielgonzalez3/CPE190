@@ -43,8 +43,8 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "bcm2835_init() failed\n");
 		return -2;
 	}
-	#PCA9685 pca9685;
-	#pca9685.Dump();
+	//PCA9685 pca9685;
+	//pca9685.Dump();
 	
 	PCA9685Servo servo;
 
@@ -53,11 +53,11 @@ int main(int argc, char **argv) {
 	servo.SetRightUs(2400);
 	
 	//Motor Controls
-	#bcm2835_gpio_fsel(M1P1, BCM2835_GPIO_FSEL_OUTP);
-	#bcm2835_gpio_fsel(M1P2, BCM2835_GPIO_FSEL_OUTP);
+	//bcm2835_gpio_fsel(M1P1, BCM2835_GPIO_FSEL_OUTP);
+	//bcm2835_gpio_fsel(M1P2, BCM2835_GPIO_FSEL_OUTP);
 	
 	//pca9685 set freq
-	#pca9685.SetFrequency(100);
+	//pca9685.SetFrequency(100);
 	
 	servo.Dump();
 
@@ -70,15 +70,15 @@ int main(int argc, char **argv) {
 
 	sleep(1);
 	
-	#puts("Turning on motor");
-	#bcm2835_gpio_write(M1P1, HIGH);
-        #bcm2835_gpio_write(M1P2, LOW);
-	#pca9685.SetFrequency(100);
-	#pca9685.Write(CHANNEL(2), VALUE(819)); 	
+	//puts("Turning on motor");
+	//bcm2835_gpio_write(M1P1, HIGH);
+        //bcm2835_gpio_write(M1P2, LOW);
+	//pca9685.SetFrequency(100);
+	//pca9685.Write(CHANNEL(2), VALUE(819)); 	
 	
-	#sleep(15);
-	#bcm2835_gpio_write(M1P1, LOW);
-	#pca9685.SetFrequency(0);
+	//sleep(15);
+	//bcm2835_gpio_write(M1P1, LOW);
+	//pca9685.SetFrequency(0);
 	
 	puts("Testing servos");
 	
