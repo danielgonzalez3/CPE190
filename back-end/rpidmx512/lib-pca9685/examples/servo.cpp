@@ -29,6 +29,10 @@
 
 #include "bcm2835.h"
 #include "pca9685servo.h"
+#include <wiringPi.h>
+
+int M1_PIN1 = 12;
+int M1_PIN2 = 16;
 
 int main(int argc, char **argv) {
 	if (getuid() != 0) {
@@ -40,13 +44,18 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "bcm2835_init() failed\n");
 		return -2;
 	}
-
+	PCA9685 pca9685;
+	pca9685.Dump();
+	sleep(5);
 	PCA9685Servo servo;
 
 	// MG90S Micro Servo
 	servo.SetLeftUs(700);
 	servo.SetRightUs(2400);
 
+	//pca9685 set freq
+	pca9685.SetFrequency(100);
+	
 	servo.Dump();
 
 	puts("testing...");
@@ -57,7 +66,23 @@ int main(int argc, char **argv) {
 	servo.SetAngle(CHANNEL(7), ANGLE(90));
 
 	sleep(1);
-
+	
+	wiringPiSetup();
+	pinMode(M1_PIN1, OUTPUT);
+	pinMode(M1_PIN2, OUTPUT);
+	digitalWrite(M1_PIN1, 1);
+	digitalWrite(M1_PIN2, 0);
+	
+	puts("Turning on motor");
+	pca9685.SetFrequency(100);
+	pca9685.Write(CHANNEL(2), VALUE(819)); 	
+	sleep(15);
+	
+	digitalWrite(M1_PIN1, 0);
+	pca9685.Write(CHANNEL(2), VALUE(0)); 	
+	
+	puts("Testing servos");
+	
 	for (;;) {
 		puts("set to zero");
 	        servo.SetAngle(CHANNEL(4), ANGLE(0));
