@@ -32,8 +32,8 @@
 
 
 int main(int argc, char **argv) {
-	#define RPI_V2_GPIO_P1_32
-	#define RPI_V2_GPIO_P1_36
+	#define M1P1 RPI_V2_GPIO_P1_32
+	#define M1P2 RPI_V2_GPIO_P1_36
 	
 	if (getuid() != 0) {
 		fprintf(stderr, "Program is not started as \'root\' (sudo)\n");
