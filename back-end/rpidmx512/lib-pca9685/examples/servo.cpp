@@ -29,10 +29,12 @@
 
 #include "bcm2835.h"
 #include "pca9685servo.h"
-#include <wiringPi.h>
 
 int M1_PIN1 = 12;
 int M1_PIN2 = 16;
+
+#define M1P1 RPI_GPIO_P1_32
+#define M1P2 RPI_GPIO_P1_36
 
 int main(int argc, char **argv) {
 	if (getuid() != 0) {
@@ -46,13 +48,18 @@ int main(int argc, char **argv) {
 	}
 	PCA9685 pca9685;
 	pca9685.Dump();
-	sleep(5);
+	
+	sleep(2);
 	PCA9685Servo servo;
 
 	// MG90S Micro Servo
 	servo.SetLeftUs(700);
 	servo.SetRightUs(2400);
-
+	
+	//Motor Controls
+	bcm2835_gpio_fsel(M1P1, BCM2835_GPIO_FSEL_OUTP);
+	bcm2835_gpio_fsel(M1P2, BCM2835_GPIO_FSEL_OUTP);
+	
 	//pca9685 set freq
 	pca9685.SetFrequency(100);
 	
@@ -67,19 +74,15 @@ int main(int argc, char **argv) {
 
 	sleep(1);
 	
-	wiringPiSetup();
-	pinMode(M1_PIN1, OUTPUT);
-	pinMode(M1_PIN2, OUTPUT);
-	digitalWrite(M1_PIN1, 1);
-	digitalWrite(M1_PIN2, 0);
-	
 	puts("Turning on motor");
+	bcm2835_gpio_write(M1P1, HIGH);
+        bcm2835_gpio_write(M1P2, LOW);
 	pca9685.SetFrequency(100);
 	pca9685.Write(CHANNEL(2), VALUE(819)); 	
-	sleep(15);
 	
-	digitalWrite(M1_PIN1, 0);
-	pca9685.Write(CHANNEL(2), VALUE(0)); 	
+	sleep(15);
+	bcm2835_gpio_write(M1P1, LOW);
+	pca9685.SetFrequency(0);
 	
 	puts("Testing servos");
 	
