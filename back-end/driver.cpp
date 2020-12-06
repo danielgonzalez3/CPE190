@@ -93,13 +93,13 @@ int main()
          if (state == 1)
          {
             cout << "STATE 1" << endl;
-	    cout << all << endl;
+	    //cout << all << endl;
          }
          //State 2
          if (state == 2)
          {
 	    cout << "STATE 2" << endl;
-	    cout << all << endl;
+	    //cout << all << endl;
 
          }
 
@@ -107,13 +107,13 @@ int main()
          if (state == 3)
          {
 	    cout << "STATE 3:" << endl;
-	    cout << all << endl;
+	    //cout << all << endl;
          }
          //State 4
          if (state == 4)
          {
 	    cout << "STATE 4:" << endl;
-            cout << all << endl;
+            //cout << all << endl;
          }
       }
    }
