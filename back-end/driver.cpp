@@ -9,7 +9,7 @@ Daniel Gonzalez */
 #include <stdio.h>
 #include <stdint.h>
 #include <unistd.h>
-#include <chrono>
+
 
 #include "bcm2835.h"
 #include "pca9685servo.h"
@@ -26,7 +26,6 @@ Daniel Gonzalez */
 // Motor 4
 #define M4P1 RPI_BPLUS_GPIO_J8_11
 #define M4P2 RPI_BPLUS_GPIO_J8_07
-typedef std::chrono::high_resolution_clock Clock;
 
 using namespace std;
 string getFile(string filename);                         // Reads whole file into a string buffer
@@ -35,6 +34,8 @@ void stripTags(string &text);
 int state        = 0;
 int nextState    = 0;
 
+int oldtime = 0;
+int newtime = 0;
 
 int main(int argc, char **argv) 
 {	
@@ -78,7 +79,7 @@ int main(int argc, char **argv)
    {
       string filename = "/var/www/html/CPE190/front-end/data.xml";
       string tag = "controlState";
-	   
+
       bool stripOtherTags = true;
       string text = getFile(filename);
       vector<string> all = getData(text, tag);
@@ -90,6 +91,8 @@ int main(int argc, char **argv)
 	 {
 	    state = s.at(2) - '0';
 	    nextState = s.at(2) - '0';
+            int tmp = std::stoi (s.substr(3,12),nullptr,0);
+            cout << tmp << endl;
          }else{
 	    nextState = s.at(2) - '0';
          }
