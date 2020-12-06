@@ -30,8 +30,21 @@
 #include "bcm2835.h"
 #include "pca9685servo.h"
 
+// Motor 1
 #define M1P1 RPI_BPLUS_GPIO_J8_36
 #define M1P2 RPI_BPLUS_GPIO_J8_32
+
+// Motor 2
+#define M2P1 RPI_BPLUS_GPIO_J8_37
+#define M2P2 RPI_BPLUS_GPIO_J8_33
+
+// Motor 3
+#define M3P1 RPI_BPLUS_GPIO_J8_13
+#define M3P2 RPI_BPLUS_GPIO_J8_15
+
+// Motor 4
+#define M4P1 RPI_BPLUS_GPIO_J8_11
+#define M4P2 RPI_BPLUS_GPIO_J8_07
 
 int main(int argc, char **argv) {	
 	if (getuid() != 0) {
@@ -45,9 +58,7 @@ int main(int argc, char **argv) {
 	}
 	PCA9685 pca9685;
 	pca9685.Dump();
-	
 	PCA9685Servo servo;
-
 	// MG90S Micro Servo
 	servo.SetLeftUs(700);
 	servo.SetRightUs(2400);
@@ -55,12 +66,15 @@ int main(int argc, char **argv) {
 	//Motor Controls
 	bcm2835_gpio_fsel(M1P1, BCM2835_GPIO_FSEL_OUTP);
 	bcm2835_gpio_fsel(M1P2, BCM2835_GPIO_FSEL_OUTP);
-	
-	//pca9685 set freq
-	//pca9685.SetFrequency(100);
+	bcm2835_gpio_fsel(M2P1, BCM2835_GPIO_FSEL_OUTP);
+	bcm2835_gpio_fsel(M2P2, BCM2835_GPIO_FSEL_OUTP);
+	bcm2835_gpio_fsel(M3P1, BCM2835_GPIO_FSEL_OUTP);
+	bcm2835_gpio_fsel(M3P2, BCM2835_GPIO_FSEL_OUTP);
+	bcm2835_gpio_fsel(M4P1, BCM2835_GPIO_FSEL_OUTP);
+	bcm2835_gpio_fsel(M4P2, BCM2835_GPIO_FSEL_OUTP);
 	
 	servo.Dump();
-
+	
 	puts("testing...");
 	
         servo.SetAngle(CHANNEL(4), ANGLE(90));
@@ -71,16 +85,15 @@ int main(int argc, char **argv) {
 	sleep(1);
 	
 	puts("Turning on motor");
-	bcm2835_gpio_write(M1P1, 1);
-        bcm2835_gpio_write(M1P2, 0);
+	bcm2835_gpio_write(M2P1, 1);
+        bcm2835_gpio_write(M2P2, 0);
 	pca9685.Write(CHANNEL(0), VALUE(1819));
 	sleep(5); 	
 	pca9685.Write(CHANNEL(0), VALUE(3638));
 	sleep(5);
-	bcm2835_gpio_write(M1P1, 0);
+	bcm2835_gpio_write(M2P1, 0);
 	
 	puts("Testing servos");
-	
 	for (;;) {
 		puts("set to zero");
 	        servo.SetAngle(CHANNEL(4), ANGLE(0));
