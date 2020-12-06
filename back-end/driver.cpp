@@ -9,7 +9,7 @@ Daniel Gonzalez */
 #include <stdio.h>
 #include <stdint.h>
 #include <unistd.h>
-
+#include <ctime>
 
 #include "bcm2835.h"
 #include "pca9685servo.h"
@@ -132,13 +132,21 @@ int main(int argc, char **argv)
          {
 	    cout << "STATE: 4 " << "DELTA: " << t_delta << endl;
          }
+      }
       if(state == nextState)
       {
-         t_delta = newtime - oldtime;
-	 cout << newtime << endl;
+         time_t currentTime;
+         long int osTime;
+         currentTime = time(0);
+         osTime = static_cast<int> (currentTime);
+
+         t_delta = osTime - oldtime;
+	 cout << t_delta << endl;
+
          t_delta = (t_delta < 0) ? 0 : t_delta;
-	 t_delta = (t_delta > 25) ? 25 : t_delta;
-	 int newFreq = baseFreq + (t_delta * 200);
+	 t_delta = (t_delta > 10) ? 10 : t_delta;
+
+	 int newFreq = baseFreq + (t_delta * 180);
          cout << newFreq << endl;
          if (state == 1)
          {
