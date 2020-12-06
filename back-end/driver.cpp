@@ -36,8 +36,16 @@ int state        = 0;
 int nextState    = 0;
 
 
-int main()
-{
+int main(int argc, char **argv) 
+{	
+   if (getuid() != 0) {
+      fprintf(stderr, "Program is not started as \'root\' (sudo)\n");
+      return -1;
+   }
+   if (bcm2835_init() != 1) {
+      fprintf(stderr, "bcm2835_init() failed\n");
+      return -2;
+   }
    cout << "Project Athena Ready and Running ..." << '\n' <<endl;
    PCA9685 pca9685;
    pca9685.Dump();
