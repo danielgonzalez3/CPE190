@@ -59,17 +59,12 @@ int main(int argc, char **argv) {
 	PCA9685 pca9685;
 	pca9685.Dump();
 	PCA9685Servo servo;
+	
 	// MG90S Micro Servo
 	servo.SetLeftUs(700);
 	servo.SetRightUs(2400);
 	
 	//Motor Controls
-	bcm2835_gpio_fsel(M1P1, BCM2835_GPIO_FSEL_OUTP);
-	bcm2835_gpio_fsel(M1P2, BCM2835_GPIO_FSEL_OUTP);
-	bcm2835_gpio_fsel(M2P1, BCM2835_GPIO_FSEL_OUTP);
-	bcm2835_gpio_fsel(M2P2, BCM2835_GPIO_FSEL_OUTP);
-	bcm2835_gpio_fsel(M3P1, BCM2835_GPIO_FSEL_OUTP);
-	bcm2835_gpio_fsel(M3P2, BCM2835_GPIO_FSEL_OUTP);
 	bcm2835_gpio_fsel(M4P1, BCM2835_GPIO_FSEL_OUTP);
 	bcm2835_gpio_fsel(M4P2, BCM2835_GPIO_FSEL_OUTP);
 	
@@ -85,13 +80,13 @@ int main(int argc, char **argv) {
 	sleep(1);
 	
 	puts("Turning on motor");
-	bcm2835_gpio_write(M2P1, 1);
-        bcm2835_gpio_write(M2P2, 0);
-	pca9685.Write(CHANNEL(0), VALUE(1819));
+	bcm2835_gpio_write(M4P1, 0);
+        bcm2835_gpio_write(M4P2, 1);
+	pca9685.Write(CHANNEL(3), VALUE(1819));
 	sleep(5); 	
-	pca9685.Write(CHANNEL(0), VALUE(3638));
+	pca9685.Write(CHANNEL(3), VALUE(3638));
 	sleep(5);
-	bcm2835_gpio_write(M2P1, 0);
+	bcm2835_gpio_write(M4P2, 0);
 	
 	puts("Testing servos");
 	for (;;) {
