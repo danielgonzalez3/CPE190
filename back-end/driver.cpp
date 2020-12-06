@@ -92,25 +92,27 @@ int main(int argc, char **argv)
 	 {
 	    state = s.at(2) - '0';
 	    nextState = s.at(2) - '0';
-            cout << tmp << endl;
             oldtime = tmp;
+            newtime = tmp;
          }else{
 	    nextState = s.at(2) - '0';
+            newtime = tmp;
          }
       }
       if(state != nextState)
       {
+	 int t_delta = newtime - oldtime;
          state = nextState;
+         oldtime = newtime;
          //State 1
          if (state == 1)
          {
-            cout << "STATE 1" << endl;
-	    //cout << all << endl;
+            cout << "STATE: 1 " << "DELTA: " << t_delta << endl;
          }
          //State 2
          if (state == 2)
          {
-	    cout << "STATE 2" << endl;
+	    cout << "STATE: 2 " << "DELTA: " << t_delta << endl;
 	    //cout << all << endl;
 
          }
@@ -118,13 +120,13 @@ int main(int argc, char **argv)
          //State 3
          if (state == 3)
          {
-	    cout << "STATE 3:" << endl;
+	    cout << "STATE: 3 " << "DELTA: " << t_delta << endl;
 	    //cout << all << endl;
          }
          //State 4
          if (state == 4)
          {
-	    cout << "STATE 4:" << endl;
+	    cout << "STATE: 4 " << "DELTA: " << t_delta << endl;
             //cout << all << endl;
          }
       }
