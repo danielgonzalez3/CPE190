@@ -35,7 +35,8 @@ int state        = 0;
 int nextState    = 0;
 int oldtime = 0;
 int newtime = 0;
-int baseFreq = 1400;
+int t_delta = 0;
+int baseFreq = 1000;
 
 int main(int argc, char **argv) 
 {	
@@ -95,15 +96,14 @@ int main(int argc, char **argv)
 	    state = s.at(2) - '0';
 	    nextState = s.at(2) - '0';
             oldtime = tmp;
-            newtime = tmp;
          }else{
 	    nextState = s.at(2) - '0';
-            newtime = tmp;
          }
+         newtime = tmp;
       }
       if(state != nextState)
       {
-	 int t_delta = newtime - oldtime;
+	 t_delta = newtime - oldtime;
          state = nextState;
          oldtime = newtime;
 	      
@@ -132,13 +132,13 @@ int main(int argc, char **argv)
          {
 	    cout << "STATE: 4 " << "DELTA: " << t_delta << endl;
          }
-      }
-      if(state == nextState)
-      {
-	 int t_delta = newtime - oldtime;
+      }else{
+         t_delta = newtime - oldtime;
+	 cout << newtime << endl;
          t_delta = (t_delta < 0) ? 0 : t_delta;
 	 t_delta = (t_delta > 25) ? 25 : t_delta;
-	 int newFreq = baseFreq + (t_delta * 100);
+	 int newFreq = baseFreq + (t_delta * 200);
+         cout << newFreq << endl;
          if (state == 1)
          {
 	    pca9685.Write(CHANNEL(0), VALUE(newFreq));
