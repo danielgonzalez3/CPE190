@@ -41,7 +41,6 @@ int S4_PIN = 1;
 
 int main()
 {
-   wiringPiSetup();
    cout << "Project Athena Ready and Running ..." << '\n' <<endl;
    PCA9685 pca9685;
    pca9685.Dump();
