@@ -34,10 +34,7 @@ vector<string> getData(const string &text, string tag);  // Gets collection of i
 void stripTags(string &text); 
 int state        = 0;
 int nextState    = 0;
-int S1_PIN = 3;
-int S2_PIN = 2;
-int S3_PIN = 0;
-int S4_PIN = 1;
+
 
 int main()
 {
@@ -95,49 +92,34 @@ int main()
          //State 1
          if (state == 1)
          {
-            cout << "STATE 1 PIN:" << S1_PIN  << endl;
-       	    pinMode(S1_PIN, OUTPUT); //Phyiscal pin 15
-            digitalWrite(S1_PIN, 1); //Turn on to 3.3v
-            delay(1000);        //ms
-	    digitalWrite(S1_PIN, 0);
-	    delay(3000);
+            cout << "STATE 1" << endl;
+	    cout << s << endl;
          }
          //State 2
          if (state == 2)
          {
-	    cout << "STATE 2 PIN:" << S2_PIN << endl;
-	    pinMode(S2_PIN, OUTPUT); //Physical pin 13
-	    digitalWrite(S2_PIN, 1); //Turn on to 3.3v
-	    delay(1000);	    //ms
-	    digitalWrite(S2_PIN, 0);
-	    delay(3000);
+	    cout << "STATE 2" << endl;
+	    cout << s << endl;
+
          }
 
          //State 3
          if (state == 3)
          {
-	    cout << "STATE 3 PIN:" << S3_PIN << endl;
-            pinMode(S3_PIN, OUTPUT); //Phyiscal pin 11
-            digitalWrite(S3_PIN, 1); //Turn on to 3.3v
-            delay(1000);        //ms 
-            digitalWrite(S3_PIN, 0);
-            delay(3000);
+	    cout << "STATE 3:" << endl;
+	    cout << s << endl;
          }
          //State 4
          if (state == 4)
          {
-	    cout << "STATE 4 PIN:" << S4_PIN <<endl;
-	    pinMode(S4_PIN, OUTPUT); //Phyiscal pin 12
-	    digitalWrite(S4_PIN, 1); //Turn on to 3.3v
-	    delay(1000);        //ms
-            digitalWrite(S4_PIN, 0);
- 	    delay(3000);
+	    cout << "STATE 4:" << endl;
+            cout << s << endl;
          }
       }
    }
 }
 
-string getFile( string filename )
+string getFile(string filename)
 {
    string buffer;
    char c;
@@ -149,12 +131,12 @@ string getFile( string filename )
    return buffer;
 }
 
-vector<string> getData( const string &text, string tag )
+vector<string> getData(const string &text, string tag)
 { 
    vector<string> collection;
    unsigned int pos = 0, start;
 
-   while ( true )
+   while (true)
    {
       start = text.find( "<" + tag, pos );   if ( start == string::npos ) return collection;
       start = text.find( ">" , start );
