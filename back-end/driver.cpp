@@ -86,13 +86,14 @@ int main(int argc, char **argv)
       for (string &s : all) 
       {
          if (stripOtherTags) stripTags(s);
+	 int tmp = std::stoi (s.substr(3,12),nullptr,0);	      
          //cout << s << '\n';
          if (state == 0)
 	 {
 	    state = s.at(2) - '0';
 	    nextState = s.at(2) - '0';
-            int tmp = std::stoi (s.substr(3,12),nullptr,0);
             cout << tmp << endl;
+            oldtime = tmp;
          }else{
 	    nextState = s.at(2) - '0';
          }
