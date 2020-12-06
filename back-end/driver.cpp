@@ -107,40 +107,41 @@ int main(int argc, char **argv)
          state = nextState;
          oldtime = newtime;
 	      
-         t_delta = (t_delta < 0) ? 0 : t_delta;
-	 t_delta = (t_delta > 25) ? 25 : t_delta;
-	 
-	 int newFreq = baseFreq + (t_delta * 100);
-
          //State 1
          if (state == 1)
          {
             cout << "STATE: 1 " << "DELTA: " << t_delta << endl;
             bcm2835_gpio_write(M1P1, 0);
 	    bcm2835_gpio_write(M1P2, 1);
-	    pca9685.Write(CHANNEL(0), VALUE(newFreq));
-	    sleep(5);
-	    bcm2835_gpio_write(M1P2, 0);
+	    pca9685.Write(CHANNEL(0), VALUE(baseFreq));
          }
          //State 2
          if (state == 2)
          {
 	    cout << "STATE: 2 " << "DELTA: " << t_delta << endl;
-	    //cout << all << endl;
-
+	    bcm2835_gpio_write(M1P2, 0);
+	    bcm2835_gpio_write(M1P1, 0); 
          }
-
          //State 3
          if (state == 3)
          {
 	    cout << "STATE: 3 " << "DELTA: " << t_delta << endl;
-	    //cout << all << endl;
          }
          //State 4
          if (state == 4)
          {
 	    cout << "STATE: 4 " << "DELTA: " << t_delta << endl;
-            //cout << all << endl;
+         }
+      }
+      if(state == nextState)
+      {
+	 int t_delta = newtime - oldtime;
+         t_delta = (t_delta < 0) ? 0 : t_delta;
+	 t_delta = (t_delta > 25) ? 25 : t_delta;
+	 int newFreq = baseFreq + (t_delta * 100);
+         if (state == 1)
+         {
+	    pca9685.Write(CHANNEL(0), VALUE(newFreq));
          }
       }
    }
