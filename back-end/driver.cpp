@@ -33,9 +33,9 @@ vector<string> getData(const string &text, string tag);  // Gets collection of i
 void stripTags(string &text); 
 int state        = 0;
 int nextState    = 0;
-
 int oldtime = 0;
 int newtime = 0;
+int baseFreq = 1400
 
 int main(int argc, char **argv) 
 {	
@@ -104,10 +104,21 @@ int main(int argc, char **argv)
 	 int t_delta = newtime - oldtime;
          state = nextState;
          oldtime = newtime;
+	      
+         t_delta = (t_delta < 0) ? 0 : t_delta;
+	 t_delta = (t_delta > 25) ? 25 : t_delta;
+	 
+	 int newFreq = baseFreq + (t_delta * 100);
+
          //State 1
          if (state == 1)
          {
             cout << "STATE: 1 " << "DELTA: " << t_delta << endl;
+            bcm2835_gpio_write(M1P1, 0);
+	    bcm2835_gpio_write(M1P2, 0);
+	    pca9685.Write(CHANNEL(0), VALUE(newFreq));
+	    sleep(5);
+	    bcm2835_gpio_write(M1P2, 0);
          }
          //State 2
          if (state == 2)
