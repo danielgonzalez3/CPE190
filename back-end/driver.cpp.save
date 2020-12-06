@@ -9,7 +9,7 @@ Daniel Gonzalez */
 #include <stdio.h>
 #include <stdint.h>
 #include <unistd.h>
-
+#include <chrono>
 
 #include "bcm2835.h"
 #include "pca9685servo.h"
@@ -26,6 +26,7 @@ Daniel Gonzalez */
 // Motor 4
 #define M4P1 RPI_BPLUS_GPIO_J8_11
 #define M4P2 RPI_BPLUS_GPIO_J8_07
+typedef std::chrono::high_resolution_clock Clock;
 
 using namespace std;
 string getFile(string filename);                         // Reads whole file into a string buffer
@@ -33,9 +34,7 @@ vector<string> getData(const string &text, string tag);  // Gets collection of i
 void stripTags(string &text); 
 int state        = 0;
 int nextState    = 0;
-int oldtime = 0;
-int newtime = 0;
-int baseFreq = 1400;
+
 
 int main(int argc, char **argv) 
 {	
@@ -48,7 +47,6 @@ int main(int argc, char **argv)
       return -2;
    }
    cout << "Project Athena Ready and Running ..." << '\n' <<endl;
-   sleep(2);
    PCA9685 pca9685;
    pca9685.Dump();
    PCA9685Servo servo;
@@ -80,52 +78,35 @@ int main(int argc, char **argv)
    {
       string filename = "/var/www/html/CPE190/front-end/data.xml";
       string tag = "controlState";
-
+	   
       bool stripOtherTags = true;
       string text = getFile(filename);
       vector<string> all = getData(text, tag);
       for (string &s : all) 
       {
          if (stripOtherTags) stripTags(s);
-	 int tmp = std::stoi (s.substr(3,12),nullptr,0);	      
-         //cout << s << '\n';
+         ycout << s << '\n';
          if (state == 0)
 	 {
-	    cout << "States Set" << endl;
 	    state = s.at(2) - '0';
 	    nextState = s.at(2) - '0';
-            oldtime = tmp;
-            newtime = tmp;
          }else{
 	    nextState = s.at(2) - '0';
-            newtime = tmp;
          }
       }
       if(state != nextState)
       {
-	 int t_delta = newtime - oldtime;
          state = nextState;
-         oldtime = newtime;
-	      
-         t_delta = (t_delta < 0) ? 0 : t_delta;
-	 t_delta = (t_delta > 25) ? 25 : t_delta;
-	 
-	 int newFreq = baseFreq + (t_delta * 100);
-
          //State 1
          if (state == 1)
          {
-            cout << "STATE: 1 " << "DELTA: " << t_delta << endl;
-            bcm2835_gpio_write(M1P1, 0);
-	    bcm2835_gpio_write(M1P2, 1);
-	    pca9685.Write(CHANNEL(0), VALUE(newFreq));
-	    sleep(5);
-	    bcm2835_gpio_write(M1P2, 0);
+            cout << "STATE 1" << endl;
+	    //cout << all << endl;
          }
          //State 2
          if (state == 2)
          {
-	    cout << "STATE: 2 " << "DELTA: " << t_delta << endl;
+	    cout << "STATE 2" << endl;
 	    //cout << all << endl;
 
          }
@@ -133,13 +114,13 @@ int main(int argc, char **argv)
          //State 3
          if (state == 3)
          {
-	    cout << "STATE: 3 " << "DELTA: " << t_delta << endl;
+	    cout << "STATE 3:" << endl;
 	    //cout << all << endl;
          }
          //State 4
          if (state == 4)
          {
-	    cout << "STATE: 4 " << "DELTA: " << t_delta << endl;
+	    cout << "STATE 4:" << endl;
             //cout << all << endl;
          }
       }
