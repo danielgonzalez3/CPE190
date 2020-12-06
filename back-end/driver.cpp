@@ -1,13 +1,32 @@
 /*Project Athena Driver
-Daniel Gonzalez
-10/10/2020 */
+Daniel Gonzalez */
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <cstdlib>
-#include <wiringPi.h>
 #include <csignal>
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>
+#include <chrono>
+
+#include "bcm2835.h"
+#include "pca9685servo.h"
+
+// Motor 1
+#define M1P1 RPI_BPLUS_GPIO_J8_36
+#define M1P2 RPI_BPLUS_GPIO_J8_32
+// Motor 2
+#define M2P1 RPI_BPLUS_GPIO_J8_37
+#define M2P2 RPI_BPLUS_GPIO_J8_33
+// Motor 3
+#define M3P1 RPI_BPLUS_GPIO_J8_13
+#define M3P2 RPI_BPLUS_GPIO_J8_15
+// Motor 4
+#define M4P1 RPI_BPLUS_GPIO_J8_11
+#define M4P2 RPI_BPLUS_GPIO_J8_07
+typedef std::chrono::high_resolution_clock Clock;
 
 using namespace std;
 string getFile(string filename);                         // Reads whole file into a string buffer
@@ -24,10 +43,38 @@ int main()
 {
    wiringPiSetup();
    cout << "Project Athena Ready and Running ..." << '\n' <<endl;
+   PCA9685 pca9685;
+   pca9685.Dump();
+   PCA9685Servo servo;
+   servo.Dump();
+
+   // MG90S Micro Servo Settings
+   servo.SetLeftUs(700);
+   servo.SetRightUs(2400);
+
+   // Set Motor Controls
+   bcm2835_gpio_fsel(M1P1, BCM2835_GPIO_FSEL_OUTP);
+   bcm2835_gpio_fsel(M1P2, BCM2835_GPIO_FSEL_OUTP);
+   bcm2835_gpio_fsel(M2P1, BCM2835_GPIO_FSEL_OUTP);
+   bcm2835_gpio_fsel(M2P2, BCM2835_GPIO_FSEL_OUTP);
+   bcm2835_gpio_fsel(M3P1, BCM2835_GPIO_FSEL_OUTP);
+   bcm2835_gpio_fsel(M3P2, BCM2835_GPIO_FSEL_OUTP);
+   bcm2835_gpio_fsel(M4P1, BCM2835_GPIO_FSEL_OUTP);
+   bcm2835_gpio_fsel(M4P2, BCM2835_GPIO_FSEL_OUTP);
+   bcm2835_gpio_write(M1P1, 0);
+   bcm2835_gpio_write(M1P2, 0);
+   bcm2835_gpio_write(M2P1, 0);
+   bcm2835_gpio_write(M2P2, 0);
+   bcm2835_gpio_write(M3P1, 0);
+   bcm2835_gpio_write(M3P2, 0);
+   bcm2835_gpio_write(M4P1, 0);
+   bcm2835_gpio_write(M4P2, 0);	
+   
    while(1) 
    {
       string filename = "/var/www/html/CPE190/front-end/data.xml";
       string tag = "controlState";
+	   
       bool stripOtherTags = true;
       string text = getFile(filename);
       vector<string> all = getData(text, tag);
