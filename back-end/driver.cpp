@@ -132,7 +132,8 @@ int main(int argc, char **argv)
          {
 	    cout << "STATE: 4 " << "DELTA: " << t_delta << endl;
          }
-      }else{
+      if(state == nextState)
+      {
          t_delta = newtime - oldtime;
 	 cout << newtime << endl;
          t_delta = (t_delta < 0) ? 0 : t_delta;
