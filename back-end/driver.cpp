@@ -21,11 +21,11 @@ Daniel Gonzalez */
 #define M2P1 RPI_BPLUS_GPIO_J8_37
 #define M2P2 RPI_BPLUS_GPIO_J8_33
 // Motor 3
-#define M3P1 RPI_BPLUS_GPIO_J8_13
-#define M3P2 RPI_BPLUS_GPIO_J8_15
+#define M3P1 RPI_BPLUS_GPIO_J8_15
+#define M3P2 RPI_BPLUS_GPIO_J8_13
 // Motor 4
-#define M4P1 RPI_BPLUS_GPIO_J8_11
-#define M4P2 RPI_BPLUS_GPIO_J8_07
+#define M4P1 RPI_BPLUS_GPIO_J8_07
+#define M4P2 RPI_BPLUS_GPIO_J8_11
 
 using namespace std;
 string getFile(string filename);                         // Reads whole file into a string buffer
