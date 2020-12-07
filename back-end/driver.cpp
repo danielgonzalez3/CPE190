@@ -146,6 +146,10 @@ int main(int argc, char **argv)
 	    bcm2835_gpio_write(M3P1, 0);
 	    bcm2835_gpio_write(M4P2, 0);
 	    bcm2835_gpio_write(M4P1, 0);
+	    pca9685.Write(CHANNEL(0), VALUE(0));
+	    pca9685.Write(CHANNEL(1), VALUE(0));
+	    pca9685.Write(CHANNEL(2), VALUE(0));
+	    pca9685.Write(CHANNEL(3), VALUE(0));		 
 	    servo.SetAngle(CHANNEL(4), ANGLE(0));
 	    servo.SetAngle(CHANNEL(5), ANGLE(0));
 	    servo.SetAngle(CHANNEL(6), ANGLE(0));
@@ -169,6 +173,10 @@ int main(int argc, char **argv)
 	    bcm2835_gpio_write(M3P1, 0);
 	    bcm2835_gpio_write(M4P2, 0);
 	    bcm2835_gpio_write(M4P1, 0);
+	    pca9685.Write(CHANNEL(0), VALUE(0));
+	    pca9685.Write(CHANNEL(1), VALUE(0));
+	    pca9685.Write(CHANNEL(2), VALUE(0));
+	    pca9685.Write(CHANNEL(3), VALUE(0));
 	    servo.SetAngle(CHANNEL(4), ANGLE(0));
 	    servo.SetAngle(CHANNEL(5), ANGLE(0));
 	    servo.SetAngle(CHANNEL(6), ANGLE(0));
