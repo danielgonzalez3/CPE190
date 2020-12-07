@@ -151,10 +151,10 @@ int main(int argc, char **argv)
             servo.SetAngle(CHANNEL(7), ANGLE(90));
 	 
          }
-         //State 3
-         if (state == 3)
+         //State 4
+         if (state == 4)
          {
-	    cout << "STATE: 3 " << "DELTA: " << t_delta << endl;
+	    cout << "STATE: 4 " << "DELTA: " << t_delta << endl;
 	    bcm2835_gpio_write(M1P2, 0);
 	    bcm2835_gpio_write(M1P1, 0); 
 	    bcm2835_gpio_write(M2P2, 0);
@@ -174,10 +174,10 @@ int main(int argc, char **argv)
             servo.SetAngle(CHANNEL(7), ANGLE(90));
 		 
          }
-         //State 4
-         if (state == 4)
+         //State 3
+         if (state == 3)
          {
-	    cout << "STATE: 4 " << "DELTA: " << t_delta << endl;
+	    cout << "STATE: 3 " << "DELTA: " << t_delta << endl;
 	    bcm2835_gpio_write(M1P1, 1);
 	    bcm2835_gpio_write(M1P2, 0);
 	    pca9685.Write(CHANNEL(0), VALUE(baseFreq));
@@ -217,7 +217,7 @@ int main(int argc, char **argv)
 	    pca9685.Write(CHANNEL(2), VALUE(newFreq));
 	    pca9685.Write(CHANNEL(3), VALUE(newFreq));
          }
-         if (state == 1)
+         if (state == 3)
 	 {
             pca9685.Write(CHANNEL(0), VALUE(newFreq));
 	    pca9685.Write(CHANNEL(1), VALUE(newFreq));
