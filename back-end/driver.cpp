@@ -203,13 +203,13 @@ int main(int argc, char **argv)
          osTime = static_cast<int> (currentTime);
 
          t_delta = osTime - oldtime;
-	 cout << t_delta << endl;
+	 //cout << t_delta << endl;
 
          t_delta = (t_delta < 0) ? 0 : t_delta;
 	 t_delta = (t_delta > 10) ? 10 : t_delta;
 
 	 int newFreq = baseFreq + (t_delta * 180);
-         cout << newFreq << endl;
+         //cout << newFreq << endl;
          if (state == 1)
          {
 	    pca9685.Write(CHANNEL(0), VALUE(newFreq));
