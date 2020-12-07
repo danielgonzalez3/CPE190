@@ -48,7 +48,7 @@ int main(int argc, char **argv)
       fprintf(stderr, "bcm2835_init() failed\n");
       return -2;
    }
-   cout << "Project Athena Ready and Running ..." << '\n' <<endl;
+   cout << "\nProject Athena Ready and Running ...\n" << '\n' <<endl;
    sleep(2);
    PCA9685 pca9685;
    pca9685.Dump();
@@ -106,11 +106,17 @@ int main(int argc, char **argv)
 	 t_delta = newtime - oldtime;
          state = nextState;
          oldtime = newtime;
-	      
+	 FILE *tempFile;
+         double T;
+         tempFile = fopen("/sys/class/thermal/thermal_zone0/temp", "r");
+	 fscanf (tempFile, "%lf", &T);
+	 T /= 1000;
+         printf ("TEMPERATURE: %6.3f C\n", T);
+         fclose(tempFile);     
          //State 1
          if (state == 1)
          {
-            cout << "STATE: 1 " << "DELTA: " << t_delta << endl;
+            cout << "STATE: 1 " << "DELTA: " << t_delta << " SEC" << endl;
             bcm2835_gpio_write(M1P1, 0);
 	    bcm2835_gpio_write(M1P2, 1);
 	    pca9685.Write(CHANNEL(0), VALUE(baseFreq));
@@ -131,7 +137,7 @@ int main(int argc, char **argv)
          //State 2
          if (state == 2)
          {
-	    cout << "STATE: 2 " << "DELTA: " << t_delta << endl;
+	    cout << "STATE: 2 " << "DELTA: " << t_delta << " SEC" << endl;
 	    bcm2835_gpio_write(M1P2, 0);
 	    bcm2835_gpio_write(M1P1, 0); 
 	    bcm2835_gpio_write(M2P2, 0);
@@ -154,7 +160,7 @@ int main(int argc, char **argv)
          //State 4
          if (state == 4)
          {
-	    cout << "STATE: 4 " << "DELTA: " << t_delta << endl;
+	    cout << "STATE: 4 " << "DELTA: " << t_delta << " SEC" << endl;
 	    bcm2835_gpio_write(M1P2, 0);
 	    bcm2835_gpio_write(M1P1, 0); 
 	    bcm2835_gpio_write(M2P2, 0);
@@ -177,7 +183,7 @@ int main(int argc, char **argv)
          //State 3
          if (state == 3)
          {
-	    cout << "STATE: 3 " << "DELTA: " << t_delta << endl;
+	    cout << "STATE: 3 " << "DELTA: " << t_delta << " SEC" << endl;
 	    bcm2835_gpio_write(M1P1, 1);
 	    bcm2835_gpio_write(M1P2, 0);
 	    pca9685.Write(CHANNEL(0), VALUE(baseFreq));
@@ -233,8 +239,8 @@ string getFile(string filename)
    string buffer;
    char c;
 
-   ifstream in( filename );   if ( !in ) { cout << filename << " not found";   exit( 1 ); }
-   while ( in.get( c ) ) buffer += c;
+   ifstream in(filename);   if (!in) { cout << filename << " not found";   exit( 1 ); }
+   while (in.get(c)) buffer += c;
    in.close();
 
    return buffer;
@@ -247,12 +253,12 @@ vector<string> getData(const string &text, string tag)
 
    while (true)
    {
-      start = text.find( "<" + tag, pos );   if ( start == string::npos ) return collection;
-      start = text.find( ">" , start );
+      start = text.find("<" + tag, pos);   if (start == string::npos) return collection;
+      start = text.find(">" , start);
       start++;
 
-      pos = text.find( "</" + tag, start );   if ( pos == string::npos ) return collection;
-      collection.push_back( text.substr( start, pos - start ) );
+      pos = text.find("</" + tag, start);   if (pos == string::npos) return collection;
+      collection.push_back( text.substr(start, pos - start));
    }
 }
 
@@ -264,7 +270,7 @@ void stripTags(string &text)
    {
       start = text.find("<", start);    if (start == string::npos) break;
       pos   = text.find(">", start);    if (pos   == string::npos) break;
-      text.erase( start, pos - start + 1 );
+      text.erase(start, pos - start + 1);
    }
 }
 
