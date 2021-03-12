@@ -12,19 +12,24 @@
 #include <ctime>
 
 // old
-//#define M4P1 RPI_BPLUS_GPIO_J8_07
-//#define M4P2 RPI_BPLUS_GPIO_J8_11
+#define M1P1 gpio7
+#define M1P2 gpio15
+#define M2P1 gpio29
+#define M2P2 gpio31
+#define M3P1 gpio32
+#define M3P2 gpio33
+#define M4P1 gpio19
+#define M4P2 gpio21
 
 using namespace std;
 string getFile(string filename);                         // Reads whole file into a string buffer
-vector<string> getData(const string &text, string tag);  // Gets collection of items between given tags
-void stripTags(string &text); 
+string filename = "/var/www/html/CPE190/front-end/data.xml";
 int state        = 0;
 int nextState    = 0;
-int oldtime = 0;
-int newtime = 0;
-int t_delta = 0;
-int baseFreq = 1000;
+int oldtime      = 0;
+int newtime      = 0;
+int t_delta      = 0;
+int baseFreq     = 1000;
 
 int main(int argc, char **argv) 
 {
@@ -33,87 +38,103 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Program is not started as \'root\' (sudo)\n");
 		return -1;
 	}
-        std::cout << "\nProject Athena Ready and Running ...\n" << '\n' <<endl;
-	sleep(2);
+	ofstream xml;
+	xml.open(filename, std::ofstream::trunc);
+	xml << "-1";
+	xml.close();
+	while(1) 
+	{	string text = getFile(filename);
+		if(text.substr(0,2) == "-1")
+		{
+			std::cout << "Waiting for Input..." << std::endl;
+		}else{
+			break;
+		}
+		sleep(2);	
+	}
+        std::cout << "\nProject Athena Ready and Running...\n" << '\n' << std::endl;
 	while(1) 
 	{
-
-		string filename = "../front-end/data.xml";
-		string tag = "controlState";
-		bool stripOtherTags = true;
-		cout << "test" << endl;
+		sleep(1); //--> Temp Fix
 		string text = getFile(filename);
-		vector<string> all = getData(text, tag);
-	        std:cout << text << endl;
-		for (string &s : all) 
+		int tmp = std::stoi (text.substr(89, 10));
+		//test here
+		//vector<string> all = getData(text, tag);
+		//end here
+		//cout << text.at(66) << endl;
+		//int tmp = std::stoi (text.substr(0,3),nullptr,0);	      
+		//std::cout << tmp << '\n';
+		if (state == 0)
 		{
-			if (stripOtherTags) stripTags(s);
-			int tmp = std::stoi (s.substr(3,12),nullptr,0);	      
-			//std::cout << s << '\n';
-			if (state == 0)
-			{
-				cout << "States Set" << endl;
-				state = s.at(2) - '0';
-				nextState = s.at(2) - '0';
-				oldtime = tmp;
-			}else{
-				nextState = s.at(2) - '0';
-			}
+			cout << "States Set" << endl;
+			state = text.at(66) - '0';
+			nextState = text.at(66) - '0';
+			oldtime = tmp;
 			newtime = tmp;
+		}else{
+			nextState = text.at(66) - '0';
 		}
+		newtime = tmp;
+
 		if(state != nextState)
 		{
 			t_delta = newtime - oldtime;
 			state = nextState;
 			oldtime = newtime;
-			FILE *tempFile;
+			/*FILE *tempFile;
 			double T;
 			tempFile = fopen("/sys/class/thermal/thermal_zone0/temp", "r");
 			fscanf (tempFile, "%lf", &T);
 			T /= 1000;
 			printf ("TEMPERATURE: %6.3f C\n", T);
-			fclose(tempFile);     
+			fclose(tempFile); */	
 			// State 1
-			if (state == 1)
+			if (nextState == 1)
 			{
-				cout << "STATE: 1 " << "DELTA: " << t_delta << " SEC" << endl;        
-				// State 2
-				if (state == 2)
-				{
-					cout << "STATE: 2 " << "DELTA: " << t_delta << " SEC" << endl;
-				}
-				// State 4
-				if (state == 4)
-				{
-					cout << "STATE: 4 " << "DELTA: " << t_delta << " SEC" << endl;
-					// State 3
-					if (state == 3)
-					{
-						cout << "STATE: 3 " << "DELTA: " << t_delta << " SEC" << endl;
-					}
-					if(state == nextState)
-					{
-						time_t currentTime;
-						long int osTime;
-						currentTime = time(0);
-						osTime = static_cast<int> (currentTime);
-
-						t_delta = osTime - oldtime;
-						//cout << t_delta << endl;
-						t_delta = (t_delta < 0) ? 0 : t_delta;
-						t_delta = (t_delta > 10) ? 10 : t_delta;
-						int newFreq = baseFreq + (t_delta * 180);
-						//cout << newFreq << endl;
-						if (state == 1)
-						{
-							cout << "state 1" <<endl;
-						}
-						if (state == 3)
-						{
-							cout << "state 3" <<endl;
-						}
-					}
-				}
+				std::cout << "STATE: 1 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;        
+			}
+			// State 2
+			if (nextState == 2)
+			{
+				std::cout << "STATE: 2 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;
+			}
+			// State 4
+			if (nextState == 4)
+			{
+				std::cout << "STATE: 4 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;
+			}
+			// State 3
+			if (nextState == 3)
+			{
+				std::cout << "STATE: 3 " << "STATE SWITCH:: " << t_delta << " SEC" << std::endl;
+			}
+			state = nextState;
+		}
+		if(state == nextState)
+		{
+			time_t currentTime;
+			long int osTime;
+			currentTime = time(0);
+			osTime = static_cast<int> (currentTime);
+			t_delta = osTime - oldtime;
+			t_delta = (t_delta < 0) ? 0 : t_delta;
+			t_delta = (t_delta > 10) ? 10 : t_delta;
+			int newFreq = baseFreq + (t_delta * 180);
+			if (nextState == 1)
+			{
+				std::cout << "STATE 1" << std::endl;
+			}
+                        if (nextState == 2)
+		        {
+				std::cout << "STATE 2" << std::endl;
+			}
+			if (nextState == 4)
+			{
+				std::cout << "STATE 4" << std::endl;
+			}
+			if (nextState == 3)
+			{
+				std::cout << "STATE 3" << std::endl;
 			}
 		}
 	}
