@@ -55,9 +55,9 @@ int main(int argc, char **argv)
         std::cout << "\nProject Athena Ready and Running...\n" << '\n' << std::endl;
 	while(1) 
 	{
-		sleep(1); //--> Temp Fix
+		usleep(10000); // Minor Delay
 		string text = getFile(filename);
-		int tmp = std::stoi (text.substr(89, 10));
+		int tmp = std::stoi (text.substr(89, 10));	
 		//test here
 		//vector<string> all = getData(text, tag);
 		//end here
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 			// State 3
 			if (nextState == 3)
 			{
-				std::cout << "STATE: 3 " << "STATE SWITCH:: " << t_delta << " SEC" << std::endl;
+				std::cout << "STATE: 3 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;
 			}
 			state = nextState;
 		}
@@ -120,32 +120,19 @@ int main(int argc, char **argv)
 			t_delta = (t_delta < 0) ? 0 : t_delta;
 			t_delta = (t_delta > 10) ? 10 : t_delta;
 			int newFreq = baseFreq + (t_delta * 180);
-			if (nextState == 1)
-			{
-				std::cout << "STATE 1" << std::endl;
-			}
-                        if (nextState == 2)
-		        {
-				std::cout << "STATE 2" << std::endl;
-			}
-			if (nextState == 4)
-			{
-				std::cout << "STATE 4" << std::endl;
-			}
-			if (nextState == 3)
-			{
-				std::cout << "STATE 3" << std::endl;
-			}
 		}
 	}
 }
 string getFile(string filename)
 {
-	string buffer;
-	char c;
-	ifstream in(filename);   if (!in) { cout << filename << " not found";   exit( 1 ); }
-	while (in.get(c)) buffer += c;
-	in.close();
+	string buffer = "";
+	while (buffer.size() == 0) 
+	{
+		char c;
+		ifstream in(filename);   if (!in) { cout << filename << " not found";   exit( 1 ); }
+		while (in.get(c)) buffer += c;
+		in.close();
+	}
 	return buffer;
 }
 
