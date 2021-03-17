@@ -3,8 +3,8 @@ extern "C" {
 #include <i2c/smbus.h>
 }
 
-#ifndef _JHPWMPCA9685_H
-#define _JHPWMPCA9685_H
+#ifndef _ATHENAPCA9685_H
+#define _ATHENAPCA9685_H
 
 #include <cstddef>
 #include <linux/i2c-dev.h>
@@ -29,12 +29,10 @@ public:
 
     void reset() ;
 
-    // Sets the frequency of the PWM signal
-    // Frequency is ranged between 40 and 1000 Hertz
+    // Sets the frequency of the PWM signal. Frequency is ranged between 40 and 1000 Hertz
     void setPWMFrequency ( float frequency );
 
-    // Channels 0-15
-    // Channels are in sets of 4 bytes
+    // Channels 0-15, Channels are in sets of 4 bytes
     void setPWM ( int channel, int onValue, int offValue);
 
     void setAllPWM (int onValue, int offValue);
@@ -50,15 +48,14 @@ public:
 };
 
 
-// Register definitions from Table 7.3 NXP Semiconductors
-// Product Data Sheet, Rev. 4 - 16 April 2015
+// REFER TO DATA SHEET
 #define PCA9685_MODE1            0x00
 #define PCA9685_MODE2            0x01
 #define PCA9685_SUBADR1          0x02
 #define PCA9685_SUBADR2          0x03
 #define PCA9685_SUBADR3          0x04
 #define PCA9685_ALLCALLADR       0x05
-// LED outbut and brightness
+
 #define PCA9685_LED0_ON_L        0x06
 #define PCA9685_LED0_ON_H        0x07
 #define PCA9685_LED0_OFF_L       0x08

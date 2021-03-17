@@ -1,8 +1,7 @@
-
-#ifndef JETSONGPIO_H_
-#define JETSONGPIO_H_
+#ifndef ATHENAGPIO_H_
+#define ATHENAGPIO_H_
 #define SYSFS_GPIO_DIR "/sys/class/gpio"
-#define POLL_TIMEOUT (3 * 1000) /* 3 seconds */
+#define POLL_TIMEOUT (2 * 1000) // 2 Second Timeout 
 #define MAX_BUF 64
 
 typedef unsigned int jetsonGPIO ;
@@ -34,16 +33,16 @@ enum jetsonGPIONumber {
 } ;
 
 
-int gpioExport ( jetsonGPIO gpio ) ;
-int gpioUnexport ( jetsonGPIO gpio ) ;
-int gpioSetDirection ( jetsonGPIO, pinDirection out_flag ) ;
-int gpioSetValue ( jetsonGPIO gpio, pinValue value ) ;
-int gpioGetValue ( jetsonGPIO gpio, unsigned int *value ) ;
-int gpioSetEdge ( jetsonGPIO gpio, char *edge ) ;
-int gpioOpen ( jetsonGPIO gpio ) ;
-int gpioClose ( int fileDescriptor ) ;
-int gpioActiveLow ( jetsonGPIO gpio, unsigned int value ) ;
+int gpioExport (jetsonGPIO gpio);
+int gpioUnexport (jetsonGPIO gpio );
+int gpioSetDirection (jetsonGPIO, pinDirection out_flag);
+int gpioSetValue (jetsonGPIO gpio, pinValue value );
+int gpioGetValue (jetsonGPIO gpio, unsigned int *value );
+int gpioSetEdge (jetsonGPIO gpio, char *edge );
+int gpioOpen (jetsonGPIO gpio);
+int gpioClose (int fileDescriptor);
+int gpioActiveLow (jetsonGPIO gpio, unsigned int value);
 
 
 
-#endif // JETSONGPIO_H_
+#endif 

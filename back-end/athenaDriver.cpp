@@ -1,6 +1,14 @@
 /*Project Athena Driver
   Daniel Gonzalez */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <termios.h>
+#include <time.h>
+#include <sys/time.h>
 #include <iostream>
+#include <string>
+#include <unistd.h>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -8,22 +16,26 @@
 #include <csignal>
 #include <stdio.h>
 #include <stdint.h>
-#include <unistd.h>
 #include <ctime>
+#include <athenaPCA9685.h>
+#include "athenaGPIO.h"
 
-// old
-#define M1P1 gpio7
-#define M1P2 gpio15
-#define M2P1 gpio29
-#define M2P2 gpio31
-#define M3P1 gpio32
-#define M3P2 gpio33
-#define M4P1 gpio19
-#define M4P2 gpio21
+// Motor Variables ["01" -> Foward | "10" -> Backwards] 
+extern const jetsonGPIONumber M1_0 = gpio7;
+extern const jetsonGPIONumber M1_1 = gpio15;
+
+extern const jetsonGPIONumber M2_0 = gpio29;
+extern const jetsonGPIONumber M2_1 = gpio31;
+
+extern const jetsonGPIONumber M3_0 = gpio32;
+extern const jetsonGPIONumber M3_1 = gpio33;
+
+extern const jetsonGPIONumber M4_0 = gpio19;
+extern const jetsonGPIONumber M4_1 = gpio21;
 
 using namespace std;
-string getFile(string filename);                         // Reads whole file into a string buffer
-string filename = "/var/www/html/CPE190/front-end/data.xml";
+string getFile(string filename);                         
+string filename  = "/var/www/html/CPE190/front-end/data.xml";
 int state        = 0;
 int nextState    = 0;
 int oldtime      = 0;
@@ -37,6 +49,15 @@ int main(int argc, char **argv)
 	{
 		fprintf(stderr, "Program is not started as \'root\' (sudo)\n");
 		return -1;
+	}
+
+	PCA9685 *pca9685 = new PCA9685();
+	int err = pca9685->openPCA9685();
+	if (err < 0)
+	{
+		printf("Error: %d", pca9685->error); 
+	}else{
+		pca9685->setAllPWM(0,0);
 	}
 	ofstream xml;
 	xml.open(filename, std::ofstream::trunc);
@@ -91,7 +112,7 @@ int main(int argc, char **argv)
 			// State 1
 			if (nextState == 1)
 			{
-				std::cout << "STATE: 1 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;        
+				std::cout << "STATE: 1 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;	
 			}
 			// State 2
 			if (nextState == 2)
