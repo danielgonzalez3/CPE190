@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <time.h>
-#include <sys/time.h>
+#include <sys/time.h> //Might not need
 #include <iostream>
 #include <string>
 #include <unistd.h>
@@ -16,6 +16,7 @@
 #include <csignal>
 #include <stdio.h>
 #include <stdint.h>
+#include <signal.h>
 #include <ctime>
 #include <athenaPCA9685.h>
 #include "athenaGPIO.h"
@@ -42,16 +43,62 @@ int oldtime      = 0;
 int newtime      = 0;
 int t_delta      = 0;
 int baseFreq     = 1000;
+PCA9685 *pca9685 = new PCA9685();
+
+// Signal Clean Up Process
+void signal_clean_up(int signum)
+{
+	printf("\n\nTerminating Athena\nINTERRUPT_SIGN_TYPE:%d\n",signum);
+	state = 0;
+	nextState = 0;
+	pca9685->setAllPWM(0,0);
+	pca9685->reset();
+	pca9685->closePCA9685();
+	gpioSetValue(M1_0, 0);
+	gpioSetValue(M1_1, 0);
+	gpioSetValue(M2_0, 0);
+	gpioSetValue(M2_1, 0);
+	gpioSetValue(M3_0, 0);
+	gpioSetValue(M3_1, 0);
+	gpioSetValue(M4_0, 0);
+	gpioSetValue(M4_1, 0);
+	gpioUnexport(M1_0);
+	gpioUnexport(M1_1);
+	gpioUnexport(M2_0);
+	gpioUnexport(M2_1);
+	gpioUnexport(M3_0);
+	gpioUnexport(M3_1);
+	gpioUnexport(M4_0);
+	gpioUnexport(M4_1);
+	exit(signum);
+}
+
 
 int main(int argc, char **argv) 
 {
+	gpioExport(M1_0);
+	gpioExport(M1_1);
+	gpioExport(M2_0);
+	gpioExport(M2_1);
+	gpioExport(M3_0);
+	gpioExport(M3_1);
+	gpioExport(M4_0);
+	gpioExport(M4_1);
+	gpioSetDirection(M1_0, outputPin);
+	gpioSetDirection(M1_1, outputPin);
+	gpioSetDirection(M2_0, outputPin);
+	gpioSetDirection(M2_1, outputPin);
+	gpioSetDirection(M3_0, outputPin);
+	gpioSetDirection(M3_1, outputPin);
+	gpioSetDirection(M4_0, outputPin);
+	gpioSetDirection(M4_1, outputPin);
+	signal(SIGINT, signal_clean_up);
 	if (getuid() != 0) 
 	{
 		fprintf(stderr, "Program is not started as \'root\' (sudo)\n");
 		return -1;
 	}
 
-	PCA9685 *pca9685 = new PCA9685();
 	int err = pca9685->openPCA9685();
 	if (err < 0)
 	{
@@ -59,6 +106,7 @@ int main(int argc, char **argv)
 	}else{
 		pca9685->setAllPWM(0,0);
 	}
+
 	ofstream xml;
 	xml.open(filename, std::ofstream::trunc);
 	xml << "-1";
@@ -88,7 +136,6 @@ int main(int argc, char **argv)
 		if (state == 0)
 		{
 			cout << "States Set" << endl;
-			state = text.at(66) - '0';
 			nextState = text.at(66) - '0';
 			oldtime = tmp;
 			newtime = tmp;
@@ -102,32 +149,47 @@ int main(int argc, char **argv)
 			t_delta = newtime - oldtime;
 			state = nextState;
 			oldtime = newtime;
-			/*FILE *tempFile;
+			
+			/* FILE *tempFile;
 			double T;
 			tempFile = fopen("/sys/class/thermal/thermal_zone0/temp", "r");
 			fscanf (tempFile, "%lf", &T);
 			T /= 1000;
 			printf ("TEMPERATURE: %6.3f C\n", T);
 			fclose(tempFile); */	
-			// State 1
+
+			// TO-DO Add Servo Movements, Set Servos to Stationary when Foward and Backward. +/-45 Degress for L/R
+			// State 1 - FOWARD
 			if (nextState == 1)
 			{
-				std::cout << "STATE: 1 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;	
+				std::cout << "STATE: 1 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;
+				gpioSetValue(M1_0, 0);
+				gpioSetValue(M1_1, 1);
+				pca9685->setPWM(0, 0, baseFreq);
 			}
-			// State 2
+			// State 2 - RIGHT
 			if (nextState == 2)
 			{
 				std::cout << "STATE: 2 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;
+				gpioSetValue(M1_0, 0);
+				gpioSetValue(M1_1, 1);
+				pca9685->setPWM(0, 0, baseFreq);
 			}
-			// State 4
+			// State 4 - BACK
 			if (nextState == 4)
 			{
 				std::cout << "STATE: 4 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;
+				gpioSetValue(M1_0, 1);
+				gpioSetValue(M1_1, 0);
+				pca9685->setPWM(0, 0, baseFreq);
 			}
-			// State 3
+			// State 3 - LEFT
 			if (nextState == 3)
 			{
 				std::cout << "STATE: 3 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;
+				gpioSetValue(M1_0, 0);
+				gpioSetValue(M1_1, 1);
+				pca9685->setPWM(0, 0, baseFreq);
 			}
 			state = nextState;
 		}
@@ -141,8 +203,14 @@ int main(int argc, char **argv)
 			t_delta = (t_delta < 0) ? 0 : t_delta;
 			t_delta = (t_delta > 10) ? 10 : t_delta;
 			int newFreq = baseFreq + (t_delta * 180);
+			if (state == 1 || 2 || 3 || 4)
+			{
+				pca9685->setPWM(0, 0, newFreq);
+			}
+
 		}
 	}
+	return EXIT_SUCCESS;
 }
 string getFile(string filename)
 {
