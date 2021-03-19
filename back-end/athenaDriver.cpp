@@ -166,6 +166,15 @@ int main(int argc, char **argv)
 				gpioSetValue(M1_0, 0);
 				gpioSetValue(M1_1, 1);
 				pca9685->setPWM(0, 0, baseFreq);
+				gpioSetValue(M2_0, 0);
+				gpioSetValue(M2_1, 1);
+				pca9685->setPWM(1, 0, baseFreq);
+				gpioSetValue(M3_0, 0);
+				gpioSetValue(M3_1, 1);
+				pca9685->setPWM(2, 0, baseFreq);
+				gpioSetValue(M4_0, 0);
+				gpioSetValue(M4_1, 1);
+				pca9685->setPWM(3, 0, baseFreq);
 			}
 			// State 2 - RIGHT
 			if (nextState == 2)
@@ -174,6 +183,15 @@ int main(int argc, char **argv)
 				gpioSetValue(M1_0, 0);
 				gpioSetValue(M1_1, 1);
 				pca9685->setPWM(0, 0, baseFreq);
+				gpioSetValue(M2_0, 0);
+				gpioSetValue(M2_1, 1);
+				pca9685->setPWM(1, 0, baseFreq);
+				gpioSetValue(M3_0, 0);
+				gpioSetValue(M3_1, 1);
+				pca9685->setPWM(2, 0, baseFreq);
+				gpioSetValue(M4_0, 0);
+				gpioSetValue(M4_1, 1);
+				pca9685->setPWM(3, 0, baseFreq);
 			}
 			// State 4 - BACK
 			if (nextState == 4)
@@ -182,6 +200,15 @@ int main(int argc, char **argv)
 				gpioSetValue(M1_0, 1);
 				gpioSetValue(M1_1, 0);
 				pca9685->setPWM(0, 0, baseFreq);
+				gpioSetValue(M2_0, 1);
+				gpioSetValue(M2_1, 0);
+				pca9685->setPWM(1, 0, baseFreq);
+				gpioSetValue(M3_0, 1);
+				gpioSetValue(M3_1, 0);
+				pca9685->setPWM(2, 0, baseFreq);
+				gpioSetValue(M4_0, 1);
+				gpioSetValue(M4_1, 0);
+				pca9685->setPWM(3, 0, baseFreq);
 			}
 			// State 3 - LEFT
 			if (nextState == 3)
@@ -190,6 +217,15 @@ int main(int argc, char **argv)
 				gpioSetValue(M1_0, 0);
 				gpioSetValue(M1_1, 1);
 				pca9685->setPWM(0, 0, baseFreq);
+				gpioSetValue(M2_0, 0);
+				gpioSetValue(M2_1, 1);
+				pca9685->setPWM(1, 0, baseFreq);
+				gpioSetValue(M3_0, 0);
+				gpioSetValue(M3_1, 1);
+				pca9685->setPWM(2, 0, baseFreq);
+				gpioSetValue(M4_0, 0);
+				gpioSetValue(M4_1, 1);
+				pca9685->setPWM(3, 0, baseFreq);
 			}
 			state = nextState;
 		}
@@ -206,6 +242,9 @@ int main(int argc, char **argv)
 			if (state == 1 || 2 || 3 || 4)
 			{
 				pca9685->setPWM(0, 0, newFreq);
+				pca9685->setPWM(1, 0, newFreq);
+				pca9685->setPWM(2, 0, newFreq);
+				pca9685->setPWM(3, 0, newFreq);
 			}
 
 		}
