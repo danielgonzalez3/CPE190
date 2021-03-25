@@ -42,6 +42,7 @@ int nextState    = 0;
 int oldtime      = 0;
 int newtime      = 0;
 int t_delta      = 0;
+int t_pivot      = 0;
 int baseFreq     = 1000;
 PCA9685 *pca9685 = new PCA9685();
 
@@ -146,8 +147,8 @@ int main(int argc, char **argv)
 
 		if(state != nextState)
 		{
+
 			t_delta = newtime - oldtime;
-			state = nextState;
 			oldtime = newtime;
 			
 			/* FILE *tempFile;
@@ -180,18 +181,22 @@ int main(int argc, char **argv)
 			if (nextState == 2)
 			{
 				std::cout << "STATE: 2 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;
-				gpioSetValue(M1_0, 0);
-				gpioSetValue(M1_1, 1);
-				pca9685->setPWM(0, 0, baseFreq);
-				gpioSetValue(M2_0, 0);
-				gpioSetValue(M2_1, 1);
-				pca9685->setPWM(1, 0, baseFreq);
-				gpioSetValue(M3_0, 0);
-				gpioSetValue(M3_1, 1);
-				pca9685->setPWM(2, 0, baseFreq);
-				gpioSetValue(M4_0, 0);
-				gpioSetValue(M4_1, 1);
-				pca9685->setPWM(3, 0, baseFreq);
+				std::cout << state << std::endl;
+				if(state == 0 || 4) 
+				{
+					gpioSetValue(M1_0, 0);
+					gpioSetValue(M1_1, 1);
+					pca9685->setPWM(0, 0, baseFreq);
+					gpioSetValue(M2_0, 0);
+					gpioSetValue(M2_1, 1);
+					pca9685->setPWM(1, 0, baseFreq);
+					gpioSetValue(M3_0, 0);
+					gpioSetValue(M3_1, 1);
+					pca9685->setPWM(2, 0, baseFreq);
+					gpioSetValue(M4_0, 0);
+					gpioSetValue(M4_1, 1);
+					pca9685->setPWM(3, 0, baseFreq);
+				}
 			}
 			// State 4 - BACK
 			if (nextState == 4)
@@ -214,18 +219,21 @@ int main(int argc, char **argv)
 			if (nextState == 3)
 			{
 				std::cout << "STATE: 3 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;
-				gpioSetValue(M1_0, 0);
-				gpioSetValue(M1_1, 1);
-				pca9685->setPWM(0, 0, baseFreq);
-				gpioSetValue(M2_0, 0);
-				gpioSetValue(M2_1, 1);
-				pca9685->setPWM(1, 0, baseFreq);
-				gpioSetValue(M3_0, 0);
-				gpioSetValue(M3_1, 1);
-				pca9685->setPWM(2, 0, baseFreq);
-				gpioSetValue(M4_0, 0);
-				gpioSetValue(M4_1, 1);
-				pca9685->setPWM(3, 0, baseFreq);
+				if (state == 0 || 4)
+				{
+					gpioSetValue(M1_0, 0);
+					gpioSetValue(M1_1, 1);
+					pca9685->setPWM(0, 0, baseFreq);
+					gpioSetValue(M2_0, 0);
+					gpioSetValue(M2_1, 1);
+					pca9685->setPWM(1, 0, baseFreq);
+					gpioSetValue(M3_0, 0);
+					gpioSetValue(M3_1, 1);
+					pca9685->setPWM(2, 0, baseFreq);
+					gpioSetValue(M4_0, 0);
+					gpioSetValue(M4_1, 1);
+					pca9685->setPWM(3, 0, baseFreq);
+				}
 			}
 			state = nextState;
 		}
@@ -237,7 +245,7 @@ int main(int argc, char **argv)
 			osTime = static_cast<int> (currentTime);
 			t_delta = osTime - oldtime;
 			t_delta = (t_delta < 0) ? 0 : t_delta;
-			t_delta = (t_delta > 10) ? 10 : t_delta;
+			t_delta = (t_delta > 10) ? 10 : t_delta; 
 			int newFreq = baseFreq + (t_delta * 180);
 			if (state == 1 || 2 || 3 || 4)
 			{
