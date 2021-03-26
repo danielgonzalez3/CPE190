@@ -43,7 +43,11 @@ int oldtime      = 0;
 int newtime      = 0;
 int t_delta      = 0;
 int t_pivot      = 0;
-int baseFreq     = 1000;
+int baseFreq     = 0;
+int servoMin_20  = 700;
+int servoMax_20  = 1200;
+int servoMin_60  = 700;
+int servoMax_60  = 1200;
 PCA9685 *pca9685 = new PCA9685();
 
 // Signal Clean Up Process
@@ -73,7 +77,10 @@ void signal_clean_up(int signum)
 	gpioUnexport(M4_1);
 	exit(signum);
 }
-
+int map ( int x, int in_min, int in_max, int out_min, int out_max)
+{
+	return  (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min ;
+}
 
 int main(int argc, char **argv) 
 {
@@ -123,6 +130,7 @@ int main(int argc, char **argv)
 		sleep(2);	
 	}
         std::cout << "\nProject Athena Ready and Running...\n" << '\n' << std::endl;
+	pca9685->setPWMFrequency(60);
 	while(1) 
 	{
 		usleep(10000); // Minor Delay
@@ -176,12 +184,25 @@ int main(int argc, char **argv)
 				gpioSetValue(M4_0, 0);
 				gpioSetValue(M4_1, 1);
 				pca9685->setPWM(3, 0, baseFreq);
+                                pca9685->setPWM(4, 0, 0);
+                                pca9685->setPWM(5, 0, 0);
+				pca9685->setPWM(6, 0, 0);
+                                pca9685->setPWM(7, 0, 0);
+                                pca9685->setPWM(8, 0, 0);
+                                pca9685->setPWM(9, 0, 0);
+                                pca9685->setPWM(10, 0, 0);
+                                pca9685->setPWM(11, 0, 0);
+				pca9685->setPWM(12, 0, 0);
+                                pca9685->setPWM(13, 0, 0);
+                                pca9685->setPWM(14, 0, 0);
+                                pca9685->setPWM(15, 0, 0);
+
 			}
 			// State 2 - RIGHT
 			if (nextState == 2)
 			{
 				std::cout << "STATE: 2 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;
-				std::cout << state << std::endl;
+				//std::cout << state << std::endl;
 				if(state == 0 || 4) 
 				{
 					gpioSetValue(M1_0, 0);
@@ -196,6 +217,28 @@ int main(int argc, char **argv)
 					gpioSetValue(M4_0, 0);
 					gpioSetValue(M4_1, 1);
 					pca9685->setPWM(3, 0, baseFreq);
+					//pca9685->setPWMFrequency(60);
+					sleep(4);
+					//pca9685->setPWM(11, 0, 1200);
+					pca9685->setPWM(11,0,map(0,0,90,servoMin_20, servoMax_20));
+					pca9685->setPWM(10,0,map(0,0,90,servoMin_20, servoMax_20));
+					
+					//pca9685->setPWMFrequency(0);
+                                        /*pca9685->setPWM(5, 0, 1500);
+                                        pca9685->setPWM(6, 0, 1500);
+                                        pca9685->setPWM(7, 0, 1500);
+                                        pca9685->setPWM(8, 0, 1500);					
+					pca9685->setPWM(9, 0, 1500);
+					pca9685->setPWM(10, 0, 1500);
+					pca9685->setPWM(11, 0, 1500);
+					pca9685->setPWM(12, 0, 1500);
+					pca9685->setPWM(13, 0, 1500);
+				        pca9685->setPWM(10, 0, 300);
+					pca9685->setPWM(11, 0, 300);
+                                        pca9685->setPWM(12, 0, 300);
+	                                pca9685->setPWM(13, 0, 300);
+					pca9685->setPWM(14, 0, 300);
+					pca9685->setPWM(15, 0, 300);*/                                    
 				}
 			}
 			// State 4 - BACK
@@ -214,6 +257,19 @@ int main(int argc, char **argv)
 				gpioSetValue(M4_0, 1);
 				gpioSetValue(M4_1, 0);
 				pca9685->setPWM(3, 0, baseFreq);
+
+				pca9685->setPWM(4, 0, 0);
+                                pca9685->setPWM(5, 0, 0);
+				pca9685->setPWM(6, 0, 0);
+                                pca9685->setPWM(7, 0, 0);
+                                pca9685->setPWM(8, 0, 0);  
+                                pca9685->setPWM(9, 0, 0);                                                              
+                                pca9685->setPWM(10, 0, 0); 
+                                pca9685->setPWM(11, 0, 0); 
+                                pca9685->setPWM(12, 0, 0);
+                                pca9685->setPWM(13, 0, 0);
+				pca9685->setPWM(14, 0, 0);
+                                pca9685->setPWM(15, 0, 0);				
 			}
 			// State 3 - LEFT
 			if (nextState == 3)
@@ -246,7 +302,8 @@ int main(int argc, char **argv)
 			t_delta = osTime - oldtime;
 			t_delta = (t_delta < 0) ? 0 : t_delta;
 			t_delta = (t_delta > 10) ? 10 : t_delta; 
-			int newFreq = baseFreq + (t_delta * 180);
+			int newFreq = baseFreq + (t_delta);
+			newFreq = 0;
 			if (state == 1 || 2 || 3 || 4)
 			{
 				pca9685->setPWM(0, 0, newFreq);
@@ -298,4 +355,3 @@ void stripTags(string &text)
 		text.erase(start, pos - start + 1);
 	}
 }
-

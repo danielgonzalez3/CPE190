@@ -34,7 +34,12 @@ int main()
 	printf("/n");
 	
     }else{
-	
+	pca9685->setAllPWM(0,0);
+	pca9685->setPWMFrequency(60);
+	pca9685->setPWM(11,0, 2000);
+	pca9685->setPWM(12,0, 2000);
+	sleep(2) 
+	/*
         pca9685->setAllPWM(0,0);
 	jetsonGPIONumber M1_0 = gpio7;
 	jetsonGPIONumber M1_1 = gpio15;
@@ -50,7 +55,8 @@ int main()
 	gpioSetValue(M1_1, 0);
 	pca9685->setPWM(0,0,0);
 	gpioUnexport(M1_0);
-	gpioUnexport(M1_1);
+	gpioUnexport(M1_1);*/
     }
+    pca9685->setAllPWM(0,0);
     pca9685->closePCA9685();
 }
