@@ -146,7 +146,7 @@ void PCA9685Servo::CalcRightCount() {
 void PCA9685Servo::CalcCenterCount() {
     m_nCenterCount = (.5 + ((204.8 * m_nCenterUs) / 1000));
 }
-void PCA9685Servo::SetAngle(uint8_t nChannel, uint8_t nAngle) 
+void PCA9685Servo::SetAngle(u_int8_t nChannel, u_int8_t nAngle) 
 {
     if (nAngle == 0) {
         Write(nChannel, m_nLeftCount);
@@ -162,19 +162,19 @@ void PCA9685Servo::SetAngle(uint8_t nChannel, uint8_t nAngle)
         Write(nChannel, nCount);
 	    }
 }
-void PCA9685::Write(uint8_t nChannel, uint16_t nValue) {
+void PCA9685::Write(u_int8_t nChannel, uint16_t nValue) {
     Write(nChannel, static_cast<uint16_t>(0), nValue);
 }
 
 void PCA9685::Write(uint16_t nOn, uint16_t nOff) {
-    Write(static_cast<uint8_t>(16), nOn, nOff);
+    Write(static_cast<u_int8_t>(16), nOn, nOff);
 }
 
 void PCA9685::Write(uint16_t nValue) {
-    Write(static_cast<uint8_t>(16), nValue);
+    Write(static_cast<u_int8_t>(16), nValue);
 }
-void PCA9685::Write(uint8_t nChannel, uint16_t nOn, uint16_t nOff) {
-    uint8_t reg;
+void PCA9685::Write(u_int8_t nChannel, uint16_t nOn, uint16_t nOff) {
+    u_int8_t reg;
 
     if (nChannel <= 15)
     {
@@ -190,7 +190,7 @@ void PCA9685::I2cSetup() {
     FUNC_PREFIX(i2c_set_baudrate(hal::i2c::FULL_SPEED));
 }
 
-void PCA9685::I2cWriteReg(uint8_t reg, uint8_t data) {
+void PCA9685::I2cWriteReg(u_int8_t reg, u_int8_t data) {
     char buffer[2];
 
     buffer[0] = reg;
@@ -201,7 +201,7 @@ void PCA9685::I2cWriteReg(uint8_t reg, uint8_t data) {
     FUNC_PREFIX(i2c_write(buffer, 2));
 }
 
-uint8_t PCA9685::I2cReadReg(uint8_t reg) {
+u_int8_t PCA9685::I2cReadReg(u_int8_t reg) {
     char data = reg;
 
     I2cSetup();
@@ -212,7 +212,7 @@ uint8_t PCA9685::I2cReadReg(uint8_t reg) {
     return data;
 }
 
-void PCA9685::I2cWriteReg(uint8_t reg, uint16_t data) {
+void PCA9685::I2cWriteReg(u_int8_t reg, uint16_t data) {
     char buffer[3];
 
     buffer[0] = reg;
@@ -224,7 +224,7 @@ void PCA9685::I2cWriteReg(uint8_t reg, uint16_t data) {
     FUNC_PREFIX(i2c_write(buffer, 3));
 }
 
-uint16_t PCA9685::I2cReadReg16(uint8_t reg) {
+uint16_t PCA9685::I2cReadReg16(u_int8_t reg) {
     char data = reg;
     char buffer[2] = { 0, 0 };
 
@@ -236,7 +236,7 @@ uint16_t PCA9685::I2cReadReg16(uint8_t reg) {
     return (buffer[1] << 8) | buffer[0];
 }
 
-void PCA9685::I2cWriteReg(uint8_t reg, uint16_t data, uint16_t data2) {
+void PCA9685::I2cWriteReg(u_int8_t reg, uint16_t data, uint16_t data2) {
     char buffer[5];
 
     buffer[0] = reg;
