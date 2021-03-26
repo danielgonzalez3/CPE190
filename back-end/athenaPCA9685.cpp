@@ -109,18 +109,18 @@ int PCA9685::writeByte(int writeRegister, int writeValue)
 }
 
 // Servo Functions //
-void PCA9685::SetLeftUs(uint16_t nLeftUs) {
+void PCA9685::SetLeftUs(u_int16_t nLeftUs) {
     assert(nLeftUs < m_nRightUs);
     assert(nLeftUs < m_nCenterUs);
 
     m_nLeftUs = nLeftUs;
     CalcLeftCount();
 }
-uint16_t PCA9685::GetLeftUs() const {
+u_int16_t PCA9685::GetLeftUs() const {
     return m_nLeftUs;
 }
 
-void PCA9685::SetRightUs(uint16_t nRightUs) {
+void PCA9685::SetRightUs(u_int16_t nRightUs) {
     assert(m_nLeftUs < nRightUs);
     assert(m_nCenterUs < nRightUs);
 
@@ -128,10 +128,10 @@ void PCA9685::SetRightUs(uint16_t nRightUs) {
     CalcRightCount();
 }
 
-uint16_t PCA9685::GetRightUs() const {
+u_int16_t PCA9685::GetRightUs() const {
     return m_nRightUs;
 }
-uint16_t PCA9685Servo::GetCenterUs() const {
+u_int16_t PCA9685Servo::GetCenterUs() const {
     return m_nCenterUs;
 }
 
@@ -155,25 +155,25 @@ void PCA9685Servo::SetAngle(u_int8_t nChannel, u_int8_t nAngle)
     } else if (nAngle >= 180) {
         Write(nChannel, m_nRightCount);
 	   } else if (nAngle < 90) {
-        const uint16_t nCount = m_nLeftCount + (.5 + (static_cast<float>((m_nCenterCount - m_nLeftCount)) / 90) * nAngle);
+        const u_int16_t nCount = m_nLeftCount + (.5 + (static_cast<float>((m_nCenterCount - m_nLeftCount)) / 90) * nAngle);
         Write(nChannel, nCount);
 	   } else {
-        const uint16_t nCount = (2 * m_nCenterCount) - m_nRightCount + (.5 + (static_cast<float>((m_nRightCount - m_nCenterCount)) / 90) * nAngle);
+        const u_int16_t nCount = (2 * m_nCenterCount) - m_nRightCount + (.5 + (static_cast<float>((m_nRightCount - m_nCenterCount)) / 90) * nAngle);
         Write(nChannel, nCount);
 	    }
 }
-void PCA9685::Write(u_int8_t nChannel, uint16_t nValue) {
-    Write(nChannel, static_cast<uint16_t>(0), nValue);
+void PCA9685::Write(u_int8_t nChannel, u_int16_t nValue) {
+    Write(nChannel, static_cast<u_int16_t>(0), nValue);
 }
 
-void PCA9685::Write(uint16_t nOn, uint16_t nOff) {
+void PCA9685::Write(u_int16_t nOn, u_int16_t nOff) {
     Write(static_cast<u_int8_t>(16), nOn, nOff);
 }
 
-void PCA9685::Write(uint16_t nValue) {
+void PCA9685::Write(u_int16_t nValue) {
     Write(static_cast<u_int8_t>(16), nValue);
 }
-void PCA9685::Write(u_int8_t nChannel, uint16_t nOn, uint16_t nOff) {
+void PCA9685::Write(u_int8_t nChannel, u_int16_t nOn, u_int16_t nOff) {
     u_int8_t reg;
 
     if (nChannel <= 15)
@@ -212,7 +212,7 @@ u_int8_t PCA9685::I2cReadReg(u_int8_t reg) {
     return data;
 }
 
-void PCA9685::I2cWriteReg(u_int8_t reg, uint16_t data) {
+void PCA9685::I2cWriteReg(u_int8_t reg, u_int16_t data) {
     char buffer[3];
 
     buffer[0] = reg;
@@ -224,7 +224,7 @@ void PCA9685::I2cWriteReg(u_int8_t reg, uint16_t data) {
     FUNC_PREFIX(i2c_write(buffer, 3));
 }
 
-uint16_t PCA9685::I2cReadReg16(u_int8_t reg) {
+u_int16_t PCA9685::I2cReadReg16(u_int8_t reg) {
     char data = reg;
     char buffer[2] = { 0, 0 };
 
@@ -236,7 +236,7 @@ uint16_t PCA9685::I2cReadReg16(u_int8_t reg) {
     return (buffer[1] << 8) | buffer[0];
 }
 
-void PCA9685::I2cWriteReg(u_int8_t reg, uint16_t data, uint16_t data2) {
+void PCA9685::I2cWriteReg(u_int8_t reg, u_int16_t data, u_int16_t data2) {
     char buffer[5];
 
     buffer[0] = reg;
