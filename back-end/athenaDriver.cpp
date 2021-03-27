@@ -43,7 +43,7 @@ int oldtime      = 0;
 int newtime      = 0;
 int t_delta      = 0;
 int t_pivot      = 0;
-int baseFreq     = 0;
+int baseFreq     = 1000;
 int servoMin_20  = 700;
 int servoMax_20  = 1200;
 int servoMin_60  = 700;
@@ -130,7 +130,7 @@ int main(int argc, char **argv)
 		sleep(2);	
 	}
         std::cout << "\nProject Athena Ready and Running...\n" << '\n' << std::endl;
-	pca9685->setPWMFrequency(60);
+	//pca9685->setPWMFrequency(60);
 	while(1) 
 	{
 		usleep(10000); // Minor Delay
@@ -220,8 +220,8 @@ int main(int argc, char **argv)
 					//pca9685->setPWMFrequency(60);
 					sleep(4);
 					//pca9685->setPWM(11, 0, 1200);
-					pca9685->setPWM(11,0,map(0,0,90,servoMin_20, servoMax_20));
-					pca9685->setPWM(10,0,map(0,0,90,servoMin_20, servoMax_20));
+					pca9685->setPWM(11,0, 140);
+					pca9685->setPWM(10,0, 492);
 					
 					//pca9685->setPWMFrequency(0);
                                         /*pca9685->setPWM(5, 0, 1500);
@@ -303,7 +303,7 @@ int main(int argc, char **argv)
 			t_delta = (t_delta < 0) ? 0 : t_delta;
 			t_delta = (t_delta > 10) ? 10 : t_delta; 
 			int newFreq = baseFreq + (t_delta);
-			newFreq = 0;
+			//newFreq = 0;
 			if (state == 1 || 2 || 3 || 4)
 			{
 				pca9685->setPWM(0, 0, newFreq);

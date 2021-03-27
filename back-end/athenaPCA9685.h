@@ -6,6 +6,7 @@ extern "C" {
 #ifndef _ATHENAPCA9685_H
 #define _ATHENAPCA9685_H
 
+
 #include <cstddef>
 #include <linux/i2c-dev.h>
 #include <sys/ioctl.h>
@@ -43,7 +44,19 @@ public:
     // Write the the given value to the given register
     int writeByte(int writeRegister, int writeValue);
 
-    int getError() ;
+    int getError();
+    
+    void I2cWriteReg(u_int8_t, u_int16_t, u_int16_t);
+
+    void Write(u_int8_t, u_int16_t);
+    
+    void Write(u_int16_t, u_int16_t);
+    
+    void Write(u_int16_t);
+    
+    void Write(u_int8_t, u_int16_t, u_int16_t);
+
+    void I2cSetup();
 
 };
 

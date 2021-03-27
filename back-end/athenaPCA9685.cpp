@@ -108,7 +108,29 @@ int PCA9685::writeByte(int writeRegister, int writeValue)
     return toReturn ;
 }
 
-// Servo Functions //
+
+
+/*
+int PCA9685::writeBlock(int writeRegister, int writeValue)
+{
+	int toReturn = i2c_smbus_write_byte_data(kI2CFileDescriptor, writeRegister, writeValue);
+	if (toReturn < 0) {
+		printf("PCA9685 Write Block error: %d",errno) ;
+		error = errno ;
+		toReturn = -1 ;
+	}
+	return toReturn ;
+}
+
+
+
+
+
+
+
+
+
+// Servo Functions - May Not need
 void PCA9685::SetLeftUs(u_int16_t nLeftUs) {
     assert(nLeftUs < m_nRightUs);
     assert(nLeftUs < m_nCenterUs);
@@ -162,6 +184,7 @@ void PCA9685Servo::SetAngle(u_int8_t nChannel, u_int8_t nAngle)
         Write(nChannel, nCount);
 	    }
 }
+
 void PCA9685::Write(u_int8_t nChannel, u_int16_t nValue) {
     Write(nChannel, static_cast<u_int16_t>(0), nValue);
 }
@@ -178,13 +201,26 @@ void PCA9685::Write(u_int8_t nChannel, u_int16_t nOn, u_int16_t nOff) {
 
     if (nChannel <= 15)
     {
-        reg = PCA9685_REG_LED0_ON_L + (nChannel << 2);
+        reg = PCA9685_ALL_LED_ON_L + (nChannel << 2);
     } else {
-        reg = PCA9685_REG_ALL_LED_ON_L;
+        reg = PCA9685_ALL_LED_ON_L;
     }
 
     I2cWriteReg(reg, nOn, nOff);
 }
+void PCA9685::I2cWriteReg(u_int8_t reg, u_int16_t data, u_int16_t data2) {
+	char buffer[5];
+	buffer[0] = reg;
+	buffer[1] = (data & 0xFF);
+	buffer[2] = (data >> 8);
+	buffer[3] = (data2 & 0xFF);
+	buffer[4] = (data2 >> 8);
+
+	I2cSetup();
+
+	FUNC_PREFIX(i2c_write(buffer, 5));
+}
+
 void PCA9685::I2cSetup() {
     FUNC_PREFIX(i2c_set_address(m_nAddress));
     FUNC_PREFIX(i2c_set_baudrate(hal::i2c::FULL_SPEED));
@@ -249,3 +285,4 @@ void PCA9685::I2cWriteReg(u_int8_t reg, u_int16_t data, u_int16_t data2) {
 
     FUNC_PREFIX(i2c_write(buffer, 5));
 }
+*/
