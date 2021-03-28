@@ -49,12 +49,12 @@
 
 class MCP9808 {
 public:
-    unsigned char kI2CBus;         // I2C bus of the TCA9548A
-    int kI2CFileDescriptor;        // File Descriptor to the TCA9548A
-    int kI2CAddress;               // Address of TCA9548A; defaults to 0x40
+    unsigned char kI2CBus;         
+    int kI2CFileDescriptor;        
+    int kI2CAddress;              
     int error;
 
-    MCP9808(int address=0x18);
+    MCP9808(int address=0x1f);
     ~MCP9808();
     bool openMCP9808();
     void closeMCP9808();
