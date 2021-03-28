@@ -54,7 +54,7 @@ public:
     int kI2CAddress;               // Address of TCA9548A; defaults to 0x40
     int error;
 
-    MCP9808(int address=0x70);
+    MCP9808(int address=0x18);
     ~MCP9808();
     bool openMCP9808();
     void closeMCP9808();
