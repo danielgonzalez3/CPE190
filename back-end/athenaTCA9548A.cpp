@@ -3,7 +3,7 @@
 
 TCA9548A::TCA9548A(int address) {
     kI2CBus = 1;           // Default I2C
-    kI2CAddress = address; // Defaults to 0x70 for TCA9548A ; jumper settable
+    kI2CAddress = 0x70; // Defaults to 0x70 for TCA9548A ; jumper settable
     error = 0;
 }
 

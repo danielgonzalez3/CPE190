@@ -29,10 +29,25 @@ int main()
 	    std::cout << "CHANNEL 0: " << (tca9548A->readByte(0x1)) << std::endl;
 	    std::cout << "CHANNEL 1: " << (tca9548A->readByte(0x2)) << std::endl;
             std::cout << "CHANNEL 2: " << (tca9548A->readByte(0x4)) << std::endl;
-	    std::cout << "CHANNEL 3: " << (tca9548A->readByte(0x2D)) << std::endl;
+	    std::cout << "CHANNEL 3: " << (tca9548A->readByte(0x8)) << std::endl;
+	    std::cout << "PRIOR:     " << (tca9548A->readByte(0x32)) << std::endl; 
+            std::cout << "PRIOR:     " << (tca9548A->readByte(0x33)) << std::endl;
+            std::cout << "PRIOR:     " << (tca9548A->readByte(0x34)) << std::endl;
+            std::cout << "PRIOR:     " << (tca9548A->readByte(0x35)) << std::endl;
+            std::cout << "PRIOR:     " << (tca9548A->readByte(0x36)) << std::endl;
+
+	    std::cout << "writing" << (tca9548A->writeByte(0x70, 0x4)) << std::endl;
+	    std::cout << "writing" << (tca9548A->writeByte(0x2D, 8)) << std::endl;
 	    
-	    std::cout << "writing" << std::endl;
-            //std::cout << "CHANNEL 1: " << (tca9548A->writeByte(0x2, )) << std::endl;
+	    std::cout << "AFTER:     " << (tca9548A->readByte(0x32)) << std::endl;
+	    std::cout << "AFTER:     " << (tca9548A->readByte(0x33)) << std::endl;
+	    std::cout << "AFTER:     " << (tca9548A->readByte(0x34)) << std::endl;
+	    std::cout << "AFTER:     " << (tca9548A->readByte(0x35)) << std::endl;
+	    std::cout << "AFTER:     " << (tca9548A->readByte(0x36)) << std::endl;
+	    std::cout << "AFTER:     " << (tca9548A->readByte(0x37)) << std::endl;
+
+            //std::cout << "writing" << (tca9548A->writeByte(0x70, 0x0)) << std::endl;
+	    //std::cout << "CHANNEL 1: " << (tca9548A->writeByte(0x2, )) << std::endl;
     }
     tca9548A->closeTCA9548A();
 }

@@ -1,3 +1,7 @@
+extern "C" {
+#include <i2c/smbus.h>
+}
+
 #ifndef _ATHENAMCP9808_H
 #define _ATHENAMCP9808_H
 

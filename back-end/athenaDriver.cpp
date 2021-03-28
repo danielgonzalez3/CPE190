@@ -302,7 +302,8 @@ int main(int argc, char **argv)
 			t_delta = osTime - oldtime;
 			t_delta = (t_delta < 0) ? 0 : t_delta;
 			t_delta = (t_delta > 10) ? 10 : t_delta; 
-			int newFreq = baseFreq + (t_delta);
+			int newFreq = baseFreq + (t_delta*180);
+			std::cout << newFreq << std::endl;
 			//newFreq = 0;
 			if (state == 1 || 2 || 3 || 4)
 			{

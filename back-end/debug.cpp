@@ -28,27 +28,36 @@ int main()
 
     int err = pca9685->openPCA9685();
     
-    //pca9685->setAllPWM(0,0);
     if (err < 0)
     {
         printf("Error: %d", pca9685->error);
 	printf("/n");
+	std::cout<<"wtf"<<std::endl;
 	
     }else{
+	//pca9685->setAllPWM(0,1600);
 	pca9685->setAllPWM(0,0);
-	pca9685->setPWMFrequency(60);
-	sleep(2);
-	
-	//pca9685->setPWM(11,0, 20);
+	sleep(3);
+	/*
+	for(int i = 0; i < 10; i++) {
+		pca9685->setPWM_20KG(9, 0, 2048-(i*64));
+                pca9685->setPWM_20KG(8, 0, 2048-(i*64));
+		pca9685->setPWM_20KG(7, 0, 2048-(i*64));
+		pca9685->setPWM_20KG(6, 0, 2048-(i*64));
+		sleep(3);
+	}*/
+	pca9685->setPWM_20KG(9, 0, 2048-(0*64));
+	//pca9685->setPWM_20KG(9, 1024, 3072);
+
+	sleep(10);
 	/*
 	for (int i=0; i<1000; i+=10) {
 		pca9685->setPWM(12,0, i);
 		std::cout << i << std::endl;
 		sleep(2);
 	}*/
-        
-	pca9685->setPWM(0,0, 1400);
-	sleep(6);
+       
+       	//_20KG	
 	/*
         pca9685->setAllPWM(0,0);
 	jetsonGPIONumber M1_0 = gpio7;

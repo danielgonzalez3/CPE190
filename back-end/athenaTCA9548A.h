@@ -30,7 +30,7 @@ class TCA9548A
 public:
     unsigned char kI2CBus;         // I2C bus of the TCA9548A
     int kI2CFileDescriptor;        // File Descriptor to the TCA9548A
-    int kI2CAddress;               // Address of TCA9548A; defaults to 0x40
+    int kI2CAddress;               // Address of TCA9548A; defaults to 0x70
     int error;
 
     TCA9548A(int address=0x70);

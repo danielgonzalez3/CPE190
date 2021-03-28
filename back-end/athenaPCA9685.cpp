@@ -72,7 +72,15 @@ void PCA9685::setPWM ( int channel, int onValue, int offValue) {
     writeByte(PCA9685_LED0_OFF_L+4*channel, offValue & 0xFF) ;
     writeByte(PCA9685_LED0_OFF_H+4*channel, offValue >> 8) ;
 }
+void PCA9685::setPWM_20KG (int channel, int start, int end){
+    writeByte(PCA9685_LED0_ON_L+4*channel, 0 & 0xFF) ;
+    writeByte(PCA9685_LED0_ON_H+4*channel, start >> 8) ;
+    writeByte(PCA9685_LED0_OFF_L+4*channel, 0 & 0xFF) ;
+    writeByte(PCA9685_LED0_OFF_H+4*channel, end >> 8) ;
 
+}
+void PCA9685::setPWM_60KG (int channel, int start, int end){
+}
 void PCA9685::setAllPWM (int onValue, int offValue) {
     writeByte(PCA9685_ALL_LED_ON_L, onValue & 0xFF) ;
     writeByte(PCA9685_ALL_LED_ON_H, onValue >> 8) ;
@@ -101,15 +109,13 @@ int PCA9685::writeByte(int writeRegister, int writeValue)
     // printf("Wrote: 0x%02X to register 0x%02X \n",writeValue, writeRegister) ;
     int toReturn = i2c_smbus_write_byte_data(kI2CFileDescriptor, writeRegister, writeValue);
     if (toReturn < 0) {
-        printf("PCA9685 Write Byte error: %d",errno) ;
+        printf("PCA9685 Write Byte error: %d",errno);
+	printf("\n");
         error = errno ;
         toReturn = -1 ;
     }
     return toReturn ;
 }
-
-
-
 /*
 int PCA9685::writeBlock(int writeRegister, int writeValue)
 {

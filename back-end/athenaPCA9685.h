@@ -34,8 +34,12 @@ public:
     void setPWMFrequency ( float frequency );
 
     // Channels 0-15, Channels are in sets of 4 bytes
-    void setPWM ( int channel, int onValue, int offValue);
+    void setPWM (int channel, int onValue, int offValue);
+    
+    void setPWM_20KG (int channel, int start, int end);
 
+    void setPWM_60KG (int channel, int start, int end);
+    
     void setAllPWM (int onValue, int offValue);
 
     // Read the given register
