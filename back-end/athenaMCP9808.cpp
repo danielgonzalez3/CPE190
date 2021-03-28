@@ -64,3 +64,16 @@ int MCP9808::writeByte(int writeRegister, int writeValue)
     }
     return toReturn ;
 }
+
+float MCP9808::readTempC() {
+    float temp = NAN;
+    u_int16_t t = i2c_smbus_read_byte_data(kI2CFileDescriptor, MCP9808_REG_AMBIENT_TEMP);
+    if (t != 0xFFFF) {
+        temp = t & 0x0FFF;
+        temp /= 16.0;
+        if (t & 0x1000)
+            temp -= 256;
+    }
+
+  return temp;
+}
