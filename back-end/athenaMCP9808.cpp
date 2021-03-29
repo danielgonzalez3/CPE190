@@ -1,6 +1,11 @@
 #include <athenaMCP9808.h>
 #include <math.h>
 #include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <linux/i2c-dev.h>
+#include <sys/ioctl.h>
+#include <fcntl.h>
 
 MCP9808::MCP9808(int address) {
     kI2CBus = 1;           
@@ -69,18 +74,33 @@ int MCP9808::writeByte(int writeRegister, int writeValue)
 
 float MCP9808::readTempF() {
     float temp = NAN;
-    uint16_t t = i2c_smbus_read_byte_data(kI2CFileDescriptor, MCP9808_REG_AMBIENT_TEMP);
-    std::cout << t << std::endl;
-
-    if (t != 0xFFFF) {
-        temp = t & 0x0FFF;
-        temp /= 16.0;
-        if (t & 0x1000)
-	{
-            temp -= 256;
-	}
-	temp = ((temp * 9.0) / 5.0) + 32;
+    int file;
+    const char *bus = "/dev/i2c-1";
+    if ((file = open(bus, O_RDWR)) < 0) {
+    	printf("Temp Sensor Broken. \n");
+	exit(1);
+    }
+    ioctl(file, I2C_SLAVE, 0x18);
+    char config[3] = {0};
+    config[0] = 0x01;
+    config[1] = 0x00;
+    config[2] = 0x00;
+    (void) write(file, config, 3);
+    config[0] = 0x08;
+    config[1] = 0x03;
+    (void) write(file, config, 2);
+    usleep(5000);
+    char reg[1] = {0x05};
+    (void) write(file, reg, 1);
+    char data[2] = {0};
+    if(read(file, data, 2) != 2)
+    {
+        printf("Error : Input/Output error \n");
+    }else{
+    	temp = ((data[0] & 0x1F) * 256 + data[1]);
+	temp = temp * 1.8 + 32;
     }
 
-    return temp;
+
+    return (temp/10);
 }
