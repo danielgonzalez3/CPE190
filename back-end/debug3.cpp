@@ -26,6 +26,7 @@ int main()
 	    printf("Error: %d", mcp9808->error);
 	    printf("/n");			
     }else{
+	    std::cout << mcp9808->readTempF() << std::endl;
             //std::cout << "CHANNEL 1: " << (tca9548A->writeByte(0x2, )) << std::endl;
     }
     mcp9808->closeMCP9808();

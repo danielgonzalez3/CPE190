@@ -1,5 +1,6 @@
 #include <athenaMCP9808.h>
 #include <math.h>
+#include <iostream>
 
 MCP9808::MCP9808(int address) {
     kI2CBus = 1;           
@@ -24,6 +25,7 @@ bool MCP9808::openMCP9808()
         error = errno ;
         return false ;
     }
+    i2c_smbus_write_word_data(kI2CFileDescriptor, MCP9808_REG_CONFIG, 0x0);
     return true ;
 }
 
@@ -65,15 +67,20 @@ int MCP9808::writeByte(int writeRegister, int writeValue)
     return toReturn ;
 }
 
-float MCP9808::readTempC() {
+float MCP9808::readTempF() {
     float temp = NAN;
-    u_int16_t t = i2c_smbus_read_byte_data(kI2CFileDescriptor, MCP9808_REG_AMBIENT_TEMP);
+    uint16_t t = i2c_smbus_read_byte_data(kI2CFileDescriptor, MCP9808_REG_AMBIENT_TEMP);
+    std::cout << t << std::endl;
+
     if (t != 0xFFFF) {
         temp = t & 0x0FFF;
         temp /= 16.0;
         if (t & 0x1000)
+	{
             temp -= 256;
+	}
+	temp = ((temp * 9.0) / 5.0) + 32;
     }
 
-  return temp;
+    return temp;
 }

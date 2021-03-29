@@ -13,7 +13,7 @@ extern "C" {
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
-
+#include <stdint.h>
 #define MCP9808_I2CADDR_DEFAULT 0x18
 #define MCP9808_REG_CONFIG 0x01
 
@@ -58,7 +58,7 @@ public:
     int kI2CAddress;              
     int error;
 
-    MCP9808(int address=0x1f);
+    MCP9808(int address=0x18);
     ~MCP9808();
     bool openMCP9808();
     void closeMCP9808();
@@ -67,7 +67,7 @@ public:
 
     // Read the given register
     int readByte(int readRegister);
-
+    float readTempF();
     // Write the the given value to the given register
     int writeByte(int writeRegister, int writeValue);
 
