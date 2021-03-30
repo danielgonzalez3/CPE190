@@ -2,7 +2,7 @@
 #include <math.h>
 
 TCA9548A::TCA9548A(int address) {
-    kI2CBus = 1;           // Default I2C
+    kI2CBus = 1;        // Default I2C
     kI2CAddress = 0x70; // Defaults to 0x70 for TCA9548A ; jumper settable
     error = 0;
 }
@@ -53,11 +53,21 @@ int TCA9548A::readByte(int readRegister)
     }
     return toReturn ;
 }
+int TCA9548A::readWord(int readRegister)
+{
+    int toReturn = i2c_smbus_read_word_data(kI2CFileDescriptor, readRegister);
+    if (toReturn < 0) {
+        printf("TCA9548A Read Byte error: %d",errno) ;
+	error = errno ;
+	toReturn = -1 ;
+    }
+    return toReturn ;
+}
 
 // Write the the given value to the given register
-int TCA9548A::writeByte(int writeRegister, int writeValue)
+int TCA9548A::writeValue(int writeValue)
 {   
-    int toReturn = i2c_smbus_write_byte_data(kI2CFileDescriptor, writeRegister, writeValue);
+    int toReturn = i2c_smbus_write_byte(kI2CFileDescriptor, writeValue);
     if (toReturn < 0) {
         printf("TCA9548A Write Byte error: %d",errno) ;
         error = errno ;
@@ -65,3 +75,21 @@ int TCA9548A::writeByte(int writeRegister, int writeValue)
     }
     return toReturn ;
 }
+int TCA9548A::writeByte(int writeRegister, int writeValue)
+{   
+	int toReturn = i2c_smbus_write_byte_data(kI2CFileDescriptor, writeRegister, writeValue);
+	if (toReturn < 0) {
+		printf("TCA9548A Write Byte error: %d",errno) ;
+		error = errno ;
+		toReturn = -1 ;
+	}
+	return toReturn ;
+}
+
+
+
+
+
+
+
+

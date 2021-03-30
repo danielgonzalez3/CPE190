@@ -37,7 +37,7 @@ int main()
     }else{
 	//pca9685->setAllPWM(0,1600);
 	pca9685->setAllPWM(0,0);
-	sleep(3);
+	sleep(1);
 	/*
 	for(int i = 0; i < 10; i++) {
 		pca9685->setPWM_20KG(9, 0, 2048-(i*64));
@@ -46,10 +46,11 @@ int main()
 		pca9685->setPWM_20KG(6, 0, 2048-(i*64));
 		sleep(3);
 	}*/
-	pca9685->setPWM_20KG(9, 0, 2048-(0*64));
-	//pca9685->setPWM_20KG(9, 1024, 3072);
-
-	sleep(10);
+	//pca9685->setPWM_20KG(9, 448, 2048+(7*64));
+	//pca9685->setPWM_20KG(10, 512, 2048);
+        //pca9685->setPWM_20KG(9, 2048+(6*256), 256);	
+        pca9685->setPWM_20KG(9, 256, 2048+(6*256));
+	sleep(4);
 	/*
 	for (int i=0; i<1000; i+=10) {
 		pca9685->setPWM(12,0, i);

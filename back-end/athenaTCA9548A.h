@@ -42,10 +42,11 @@ public:
 
     // Read the given register
     int readByte(int readRegister);
+    int readWord(int readRegister);
 
     // Write the the given value to the given register
+    int writeValue(int writeValue);
     int writeByte(int writeRegister, int writeValue);
-
     int getError();
 
 };

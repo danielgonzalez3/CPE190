@@ -19,6 +19,7 @@
 #include <signal.h>
 #include <ctime>
 #include <athenaPCA9685.h>
+#include <athenaMCP9808.h>
 #include "athenaGPIO.h"
 
 // Motor Variables ["01" -> Foward | "10" -> Backwards] 
@@ -48,7 +49,9 @@ int servoMin_20  = 700;
 int servoMax_20  = 1200;
 int servoMin_60  = 700;
 int servoMax_60  = 1200;
+int temp_mcp     = -1;
 PCA9685 *pca9685 = new PCA9685();
+MCP9808 *mcp9808 = new MCP9808();
 
 // Signal Clean Up Process
 void signal_clean_up(int signum)
@@ -158,20 +161,14 @@ int main(int argc, char **argv)
 
 			t_delta = newtime - oldtime;
 			oldtime = newtime;
+			temp_mcp = mcp9808->readTempF();
 			
-			/* FILE *tempFile;
-			double T;
-			tempFile = fopen("/sys/class/thermal/thermal_zone0/temp", "r");
-			fscanf (tempFile, "%lf", &T);
-			T /= 1000;
-			printf ("TEMPERATURE: %6.3f C\n", T);
-			fclose(tempFile); */	
 
 			// TO-DO Add Servo Movements, Set Servos to Stationary when Foward and Backward. +/-45 Degress for L/R
 			// State 1 - FOWARD
 			if (nextState == 1)
 			{
-				std::cout << "STATE: 1 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;
+				std::cout << "STATE: 1 " << "STATE SWITCH: " << t_delta << " SEC " << temp_mcp << " F DEGREES" <<std::endl;
 				gpioSetValue(M1_0, 0);
 				gpioSetValue(M1_1, 1);
 				pca9685->setPWM(0, 0, baseFreq);
@@ -201,7 +198,7 @@ int main(int argc, char **argv)
 			// State 2 - RIGHT
 			if (nextState == 2)
 			{
-				std::cout << "STATE: 2 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;
+				std::cout << "STATE: 2 " << "STATE SWITCH: " << t_delta << " SEC " << temp_mcp << " F DEGREES" <<std::endl;
 				//std::cout << state << std::endl;
 				if(state == 0 || 4) 
 				{
@@ -244,7 +241,7 @@ int main(int argc, char **argv)
 			// State 4 - BACK
 			if (nextState == 4)
 			{
-				std::cout << "STATE: 4 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;
+				std::cout << "STATE: 4 " << "STATE SWITCH: " << t_delta << " SEC " << temp_mcp << " F DEGREES" <<std::endl;
 				gpioSetValue(M1_0, 1);
 				gpioSetValue(M1_1, 0);
 				pca9685->setPWM(0, 0, baseFreq);
@@ -274,7 +271,7 @@ int main(int argc, char **argv)
 			// State 3 - LEFT
 			if (nextState == 3)
 			{
-				std::cout << "STATE: 3 " << "STATE SWITCH: " << t_delta << " SEC" << std::endl;
+				std::cout << "STATE: 3 " << "STATE SWITCH: " << t_delta << " SEC "<< temp_mcp << " F DEGREES" <<std::endl;
 				if (state == 0 || 4)
 				{
 					gpioSetValue(M1_0, 0);
@@ -303,7 +300,6 @@ int main(int argc, char **argv)
 			t_delta = (t_delta < 0) ? 0 : t_delta;
 			t_delta = (t_delta > 10) ? 10 : t_delta; 
 			int newFreq = baseFreq + (t_delta*180);
-			std::cout << newFreq << std::endl;
 			//newFreq = 0;
 			if (state == 1 || 2 || 3 || 4)
 			{
