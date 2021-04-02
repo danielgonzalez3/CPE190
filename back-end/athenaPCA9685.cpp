@@ -1,7 +1,7 @@
 #include <athenaPCA9685.h>
 #include <math.h>
 #include <cassert>
-
+#include <iostream>
 PCA9685::PCA9685(int address) {
     kI2CBus = 1;           // Default I2C
     kI2CAddress = address; // Defaults to 0x40 for PCA9685 ; jumper settable
@@ -67,16 +67,36 @@ void PCA9685::setPWMFrequency ( float frequency ) {
 // Channels 0-15
 // Channels are in sets of 4 bytes
 void PCA9685::setPWM ( int channel, int onValue, int offValue) {
+    printf("PCA9685 CHANNEL: 0x%02X\n",channel); 
+    printf("on PWM: %d\n",onValue);
+    printf("off PWM: %d\n\n\n",offValue);   
     writeByte(PCA9685_LED0_ON_L+4*channel, onValue & 0xFF) ;
     writeByte(PCA9685_LED0_ON_H+4*channel, onValue >> 8) ;
     writeByte(PCA9685_LED0_OFF_L+4*channel, offValue & 0xFF) ;
     writeByte(PCA9685_LED0_OFF_H+4*channel, offValue >> 8) ;
 }
-void PCA9685::setPWM_20KG (int channel, int start, int end){
-    writeByte(PCA9685_LED0_ON_L+4*channel, 0 & 0xFF) ;
-    writeByte(PCA9685_LED0_ON_H+4*channel, start >> 8) ;
-    writeByte(PCA9685_LED0_OFF_L+4*channel, 0 & 0xFF) ;
-    writeByte(PCA9685_LED0_OFF_H+4*channel, end >> 8) ;
+void PCA9685::setPWM_ANGLE (int angle, int L, int R){
+    // Left_us = 700;
+    // Right_us = 2400;
+    // L = (.5 + ((204.8 * L) / 1000));
+    // R = (.5 + ((204.8 * R) / 1000));
+    
+    if (angle == 0) {
+        L = (.5 + ((204.8 * L) / 1000));	    
+        setPWM(0, 0, L); 
+    } else if (angle == 180) {
+        R = (.5 + ((204.8 * R) / 1000));	    
+        setPWM(0, 0, R);
+    } else if (angle == 90) {
+        float Center = (L + R)/2;
+        float M = (.5 + ((204.8 * Center) / 1000));
+        setPWM(0, 0, M);
+    } else {
+        float Center = (L + R)/2;
+	float M = (.5 + ((204.8 * Center) / 1000));
+	float PWM = (2 * M) - R + (.5 + (static_cast<float>((R - M)) / 90) * angle);
+        setPWM(0, 0, PWM);
+    }
 
 }
 void PCA9685::setPWM_60KG (int channel, int start, int end){

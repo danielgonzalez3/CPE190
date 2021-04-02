@@ -62,6 +62,7 @@ void signal_clean_up(int signum)
 	pca9685->setAllPWM(0,0);
 	pca9685->reset();
 	pca9685->closePCA9685();
+        mcp9808->closemcp9808();
 	gpioSetValue(M1_0, 0);
 	gpioSetValue(M1_1, 0);
 	gpioSetValue(M2_0, 0);

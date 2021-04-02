@@ -31,12 +31,12 @@ public:
     void reset() ;
 
     // Sets the frequency of the PWM signal. Frequency is ranged between 40 and 1000 Hertz
-    void setPWMFrequency ( float frequency );
+    void setPWMFrequency (float frequency);
 
     // Channels 0-15, Channels are in sets of 4 bytes
     void setPWM (int channel, int onValue, int offValue);
     
-    void setPWM_20KG (int channel, int start, int end);
+    void setPWM_ANGLE (int angle, int L, int R);
 
     void setPWM_60KG (int channel, int start, int end);
     

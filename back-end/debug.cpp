@@ -35,30 +35,23 @@ int main()
 	std::cout<<"wtf"<<std::endl;
 	
     }else{
-	//pca9685->setAllPWM(0,1600);
 	pca9685->setAllPWM(0,0);
-	sleep(1);
-	/*
-	for(int i = 0; i < 10; i++) {
-		pca9685->setPWM_20KG(9, 0, 2048-(i*64));
-                pca9685->setPWM_20KG(8, 0, 2048-(i*64));
-		pca9685->setPWM_20KG(7, 0, 2048-(i*64));
-		pca9685->setPWM_20KG(6, 0, 2048-(i*64));
-		sleep(3);
-	}*/
-	//pca9685->setPWM_20KG(9, 448, 2048+(7*64));
-	//pca9685->setPWM_20KG(10, 512, 2048);
-        //pca9685->setPWM_20KG(9, 2048+(6*256), 256);	
-        pca9685->setPWM_20KG(9, 256, 2048+(6*256));
-	sleep(4);
-	/*
-	for (int i=0; i<1000; i+=10) {
-		pca9685->setPWM(12,0, i);
-		std::cout << i << std::endl;
-		sleep(2);
-	}*/
-       
-       	//_20KG	
+	//pca9685->reset();
+
+	sleep(2);
+	//pca9685->reset();
+	pca9685->setPWM_ANGLE(0, 700, 2400);
+	sleep(3);
+        pca9685->setPWM_ANGLE(90, 700, 2400);	
+        //pca9685->setPWM(0, 0, 142.86);
+        //pca9685->setPWM(0, 0, 492.02);
+        sleep(4);
+	pca9685->setPWM(0, 0, 2048);	
+        sleep(3);
+        pca9685->setPWM_ANGLE(180, 700, 2400);	
+	sleep(2);
+
+        //pca9685->setPWM(0, 2048, 0);
 	/*
         pca9685->setAllPWM(0,0);
 	jetsonGPIONumber M1_0 = gpio7;
@@ -76,7 +69,12 @@ int main()
 	pca9685->setPWM(0,0,0);
 	gpioUnexport(M1_0);
 	gpioUnexport(M1_1);*/
+
     }
-    pca9685->setAllPWM(0,0);
+    std::cout << "turning All PWM to Zero\n" << std::endl;
+    pca9685->setAllPWM(0,0);    
+    sleep(2);
+    //pca9685->reset();
+    std::cout << "closing..." << std::endl;
     pca9685->closePCA9685();
 }
