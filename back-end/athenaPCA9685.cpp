@@ -88,13 +88,14 @@ void PCA9685::setPWM_ANGLE (int angle, int L, int R){
         R = (.5 + ((204.8 * R) / 1000));	    
         setPWM(0, 0, R);
     } else if (angle == 90) {
-        float Center = (L + R)/2;
-        float M = (.5 + ((204.8 * Center) / 1000));
+        int Center = (L + R)/2;
+        int M = (.5 + ((204.8 * Center) / 1000));
         setPWM(0, 0, M);
     } else {
-        float Center = (L + R)/2;
-	float M = (.5 + ((204.8 * Center) / 1000));
-	float PWM = (2 * M) - R + (.5 + (static_cast<float>((R - M)) / 90) * angle);
+        int Center = (L + R)/2;
+	int M = (.5 + ((204.8 * Center) / 1000));
+        R = (.5 + ((204.8 * R) / 1000));	
+	int PWM = (2 * M) - R + (.5 + (static_cast<float>((R - M)) / 90) * angle);
         setPWM(0, 0, PWM);
     }
 

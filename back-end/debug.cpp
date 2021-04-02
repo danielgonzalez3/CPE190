@@ -14,9 +14,8 @@
 // Calibrated for a Robot Geek RGS-13 Servo
 // Make sure these are appropriate for the servo being used!
 
-int servoMin = 2000;
-int servoMax = 2600;
-
+int servoMin = 1564;
+int servoMax = 6756;
 // M1: 7 - 15
 // M2: 29 - 31
 // M3: 32 - 33
@@ -38,20 +37,29 @@ int main()
 	pca9685->setAllPWM(0,0);
 	//pca9685->reset();
 
-	sleep(2);
-	//pca9685->reset();
-	pca9685->setPWM_ANGLE(0, 700, 2400);
+        std::cout<<"0 DEGREES"<<std::endl;	
+        pca9685->setPWM_ANGLE(0, servoMin, servoMax);        
+	sleep(4);
+
+        std::cout<<"180 DEGREES"<<std::endl;	
+	pca9685->setPWM_ANGLE(180, servoMin, servoMax);	
 	sleep(3);
-        pca9685->setPWM_ANGLE(90, 700, 2400);	
-        //pca9685->setPWM(0, 0, 142.86);
-        //pca9685->setPWM(0, 0, 492.02);
-        sleep(4);
-	pca9685->setPWM(0, 0, 2048);	
-        sleep(3);
-        pca9685->setPWM_ANGLE(180, 700, 2400);	
+
+        std::cout<<"90 DEGREES"<<std::endl;
+        pca9685->setPWM_ANGLE(90, servoMin, servoMax);	
+	sleep(2);
+        
+	std::cout<<"45 DEGREES"<<std::endl;
+        pca9685->setPWM_ANGLE(45, servoMin, servoMax);
+        sleep(2);
+
+        std::cout<<"0 DEGREES"<<std::endl;	
+        pca9685->setPWM_ANGLE(0, servoMin, servoMax);	
 	sleep(2);
 
-        //pca9685->setPWM(0, 2048, 0);
+
+
+	//pca9685->setPWM(0, 2048, 0);
 	/*
         pca9685->setAllPWM(0,0);
 	jetsonGPIONumber M1_0 = gpio7;
