@@ -131,9 +131,9 @@ typedef struct gyroRawData_s {
 class FXAS21002C
 {
 public:
-    unsigned char kI2CBus;         // I2C bus of the TCA9548A
-    int kI2CFileDescriptor;        // File Descriptor to the TCA9548A
-    int kI2CAddress;               // Address of TCA9548A; defaults to 0x70
+    unsigned char kI2CBus;         // I2C bus
+    int kI2CFileDescriptor;        // File Descriptor
+    int kI2CAddress;               // Address
     int error;
     int rng;
 

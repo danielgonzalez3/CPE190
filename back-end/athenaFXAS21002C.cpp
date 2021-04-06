@@ -25,7 +25,7 @@ void FXAS21002C::getSensor(sensor_t *sensor) {
     sensor->min_value = (this->rng * -1.0) * SENSORS_DPS_TO_RADS;
     sensor->resolution = 0.0F; // TBD
 }
-void FXAS21002C::getEvent(sensors_event_t *event) {
+void   FXAS21002C::getEvent(sensors_event_t *event) {
     bool readingValid = false;
     memset(event, 0, sizeof(sensors_event_t));
     raw.x = 0;
@@ -38,12 +38,13 @@ void FXAS21002C::getEvent(sensors_event_t *event) {
     
     /* Read 7 bytes from the sensor */ 
     u8 values[7] = {0, 0, 0, 0, 0, 0, 0};
+    
     // replace with master receiver !! int sensor_value = i2c_smbus_read_block_data(kI2CFileDescriptor, FXAS21002C_ADDRESS, values);
-    int res = i2c_master_send(kI2CFileDescriptor, values, 7);	
+    int res = i2c_smbus_read_block_data(kI2CFileDescriptor, 0x1F, values);	
     
     // i2c smbus read block data
     writeValue(GYRO_REGISTER_STATUS|0x80);
-        
+    int res = i2c_smbus_read_block_data(kI2CFileDescriptor, 0x1F, values);        
 
 }
 

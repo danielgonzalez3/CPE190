@@ -14,8 +14,12 @@
 // Calibrated for a Robot Geek RGS-13 Servo
 // Make sure these are appropriate for the servo being used!
 
-int servoMin = 1564;
-int servoMax = 6756;
+int servoMin_20 = 1564;
+int servoMax_20 = 6756;
+
+int servoMin_60 = 1780;
+int servoMax_60 = 7250;
+
 // M1: 7 - 15
 // M2: 29 - 31
 // M3: 32 - 33
@@ -34,27 +38,44 @@ int main()
 	std::cout<<"wtf"<<std::endl;
 	
     }else{
-	pca9685->setAllPWM(0,0);
 	//pca9685->reset();
+        sleep(2);	
+	pca9685->setAllPWM(0,0);
 
-        std::cout<<"0 DEGREES"<<std::endl;	
-        pca9685->setPWM_ANGLE(0, servoMin, servoMax);        
+        std::cout<<"135 DEGREES"<<std::endl;	
+        pca9685->setPWM_ANGLE(135, servoMin_20, servoMax_20);
+        pca9685->setPWM_ANGLE_60KG(135, servoMin_60, servoMax_60);
 	sleep(4);
 
-        std::cout<<"180 DEGREES"<<std::endl;	
-	pca9685->setPWM_ANGLE(180, servoMin, servoMax);	
+        std::cout<<"265 DEGREES"<<std::endl;	
+	pca9685->setPWM_ANGLE(265, servoMin_20, servoMax_20);
+	pca9685->setPWM_ANGLE_60KG(265, servoMin_60, servoMax_60);	
 	sleep(3);
 
-        std::cout<<"90 DEGREES"<<std::endl;
-        pca9685->setPWM_ANGLE(90, servoMin, servoMax);	
+        std::cout<<"0 DEGREES"<<std::endl;
+        pca9685->setPWM_ANGLE(0, servoMin_20, servoMax_20);	
+        pca9685->setPWM_ANGLE_60KG(0, servoMin_60, servoMax_60);
+	//pca9685->setPWM(1, 0, 2044);
 	sleep(2);
         
-	std::cout<<"45 DEGREES"<<std::endl;
-        pca9685->setPWM_ANGLE(45, servoMin, servoMax);
+	std::cout<<"135 DEGREES"<<std::endl;
+        pca9685->setPWM_ANGLE(135, servoMin_20, servoMax_20);
+	pca9685->setPWM_ANGLE_60KG(135, servoMin_60, servoMax_60);
         sleep(2);
 
-        std::cout<<"0 DEGREES"<<std::endl;	
-        pca9685->setPWM_ANGLE(0, servoMin, servoMax);	
+        std::cout<<"265 DEGREES"<<std::endl;
+	pca9685->setPWM_ANGLE(265, servoMin_20, servoMax_20);
+	pca9685->setPWM_ANGLE_60KG(265, servoMin_60, servoMax_60);
+	sleep(3);
+
+        std::cout<<"0 DEGREES"<<std::endl;	        
+	pca9685->setPWM_ANGLE(0, servoMin_20, servoMax_20);	        
+	pca9685->setPWM_ANGLE_60KG(0, servoMin_60, servoMax_60);
+	sleep(3);
+
+        std::cout<<"135 DEGREES"<<std::endl;	
+        pca9685->setPWM_ANGLE(135, servoMin_20, servoMax_20);	
+	pca9685->setPWM_ANGLE_60KG(135, servoMin_60, servoMax_60);
 	sleep(2);
 
 

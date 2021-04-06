@@ -37,8 +37,8 @@ public:
     void setPWM (int channel, int onValue, int offValue);
     
     void setPWM_ANGLE (int angle, int L, int R);
-
-    void setPWM_60KG (int channel, int start, int end);
+    
+    void setPWM_ANGLE_60KG (int angle, int L, int R);
     
     void setAllPWM (int onValue, int offValue);
 
