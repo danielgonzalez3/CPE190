@@ -12,6 +12,9 @@ FXAS21002C::~FXAS21002C() {
     closeFXAS21002C() ;
 }
 
+
+
+
 void FXAS21002C::getSensor(sensor_t *sensor) {
     /* Clear the sensor_t object */
     memset(sensor, 0, sizeof(sensor_t));
@@ -92,7 +95,6 @@ void FXAS21002C::closeFXAS21002C()
 {
     if (kI2CFileDescriptor > 0) {
         close(kI2CFileDescriptor);
-        // WARNING - This is not quite right, need to check for error first
         kI2CFileDescriptor = -1 ;
     }
 }
@@ -125,20 +127,6 @@ int FXAS21002C::readWord(int readRegister)
     }
     return toReturn;
 }
-
-
-/*
-int FXAS21002C::readBlock(int readRegister)
-{
-    int toReturn = i2c_smbus_read_block_data(kI2CFileDescriptor, readRegister);
-    if (toReturn < 0) {
-        printf("FXAS21002C Read Byte error: %d",errno) ;
-        error = errno ;
-        toReturn = -1 ;
-    }
-    return toReturn ;
-}*/
-
 
 int FXAS21002C::writeValue(int writeValue)
 {   
