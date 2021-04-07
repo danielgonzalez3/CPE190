@@ -3,7 +3,6 @@
 College of Engineering and Computer Science
 
 
-
 CPE 190/EEE 193A
 Senior Design
 
