@@ -27,6 +27,21 @@ int main()
 	    printf("/n");			
     }else{
             std::cout << "test" << " " << std::endl;
+	    test->activate(false);
+	    test->ready(false);
+	    sleep(1);
+	    u_int8_t status = test->getStatus();
+	    std::cout << unsigned(status)<< " test status" << std::endl;
+
+            
+	    status = test->getStatus();
+	    std::cout << unsigned(status)<< " reg value" << std::endl;
+
+
+	    status = test->getStatus();
+	    std::cout << unsigned(status)<< " reg value" << std::endl;
+	    sleep(1);
     }
+    
     test->closeFXAS21002C();
 }

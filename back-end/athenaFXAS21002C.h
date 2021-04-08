@@ -177,6 +177,21 @@ public:
     int writeByte(int writeRegister, int writeValue);
     int getError();
     gyroRawData_t raw;
+
+    // New Implementation
+    u_int8_t getStatus(void);
+    int16_t getX(void);
+    int16_t getY(void);
+    int16_t getZ(void);
+    void activate(bool mode);
+    void selftest(bool mode);
+    void ready(bool mode);
+    u_int8_t getCTRL1(void);
+    void setCTRL1(u_int8_t value);
+    u_int8_t getCTRL2(void);
+    void setCTRL2(u_int8_t value);
+    u_int8_t getCTRL3(void);
+    void setCTRL3(u_int8_t value);
 };
 
 

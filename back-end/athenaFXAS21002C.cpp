@@ -28,6 +28,7 @@ void FXAS21002C::getSensor(sensor_t *sensor) {
     sensor->min_value = (this->rng * -1.0) * SENSORS_DPS_TO_RADS;
     sensor->resolution = 0.0F; // TBD
 }
+/*
 void   FXAS21002C::getEvent(sensors_event_t *event) {
     bool readingValid = false;
     memset(event, 0, sizeof(sensors_event_t));
@@ -39,7 +40,7 @@ void   FXAS21002C::getEvent(sensors_event_t *event) {
     event->type = SENSOR_TYPE_GYROSCOPE;
     //event->timestamp = millis();
     
-    /* Read 7 bytes from the sensor */ 
+    // Read 7 bytes from the sensor  
     u8 values[7] = {0, 0, 0, 0, 0, 0, 0};
     
     // replace with master receiver !! int sensor_value = i2c_smbus_read_block_data(kI2CFileDescriptor, FXAS21002C_ADDRESS, values);
@@ -50,7 +51,7 @@ void   FXAS21002C::getEvent(sensors_event_t *event) {
     int res = i2c_smbus_read_block_data(kI2CFileDescriptor, 0x1F, values);        
 
 }
-
+*/
 
 bool FXAS21002C::openFXAS21002C()
 {
@@ -151,9 +152,105 @@ int FXAS21002C::writeByte(int writeRegister, int writeValue)
 	return toReturn ;
 }
 
+u_int8_t FXAS21002C::getStatus(void) 
+{
+	u_int8_t status ;
+        status = i2c_smbus_read_byte_data(kI2CFileDescriptor, REG_STATUS);	
+        return(status) ;
+}
 
+int16_t FXAS21002C::getX(void)
+{
+	u_int8_t data[2];
+	int16_t value;
+	data[0] = readByte(REG_OUT_X_MSB);
+	data[1] = readByte(REG_OUT_X_LSB);
+	value = (data[0] << 8) | data[1];
+	return(value);
+}
 
+int16_t FXAS21002C::getY(void)
+{
+        u_int8_t data[2];
+        int16_t value;
+        data[0] = readByte(REG_OUT_Y_MSB);
+        data[1] = readByte(REG_OUT_Y_LSB);
+        value = (data[0] << 8) | data[1];
+        return(value);
+}
 
+int16_t FXAS21002C::getZ(void)
+{
+        u_int8_t data[2];
+        int16_t value;
+        data[0] = readByte(REG_OUT_Z_MSB);
+        data[1] = readByte(REG_OUT_Z_LSB);
+        value = (data[0] << 8) | data[1];
+        return(value);
+}
 
+void FXAS21002C::setCTRL1(u_int8_t value) 
+{
+    writeByte(REG_CTRL_REG1, value);
+}
+
+void FXAS21002C::setCTRL2(u_int8_t value)
+{
+    writeByte(REG_CTRL_REG2, value);
+}
+
+void FXAS21002C::setCTRL3(u_int8_t value)
+{
+    writeByte(REG_CTRL_REG3, value);
+}
+
+u_int8_t FXAS21002C::getCTRL1(void) 
+{
+	return readByte(REG_CTRL_REG1);
+}
+
+u_int8_t FXAS21002C::getCTRL2(void)
+{
+	return readByte(REG_CTRL_REG2);
+}
+
+u_int8_t FXAS21002C::getCTRL3(void)
+{
+	return readByte(REG_CTRL_REG3);
+}
+
+void FXAS21002C::selftest(bool mode)
+{
+	u_int8_t value = getCTRL1();
+	if (mode)
+	{
+	    value |= 0x10;
+	} else {
+	    value ^= 0x10;
+	}
+	setCTRL1(value);
+}
+void FXAS21002C::activate(bool mode)
+{
+        u_int8_t value = getCTRL1();
+        if (mode)
+        {
+            value |= 0x02;
+        } else {
+            value ^= 0x02;
+        }
+        setCTRL1(value);
+}
+void FXAS21002C::ready(bool mode)
+{
+        u_int8_t value = getCTRL1();
+        if (mode)
+        {
+            value |= 0x01;
+        } else {
+            value ^= 0x01;
+        }
+        setCTRL1(value);
+}
 
 
