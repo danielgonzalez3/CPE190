@@ -106,9 +106,9 @@ void FXAS21002C::reset () {
 }
 
 
-int FXAS21002C::readByte(int readRegister)
+int FXAS21002C::readByte(u_int8_t readRegister)
 {
-    int toReturn = i2c_smbus_read_byte_data(kI2CFileDescriptor, readRegister);
+    u_int8_t toReturn = i2c_smbus_read_byte_data(kI2CFileDescriptor, readRegister);
     if (toReturn < 0) {
         printf("FXAS21002C Read Byte error: %d",errno) ;
         error = errno ;
@@ -118,9 +118,9 @@ int FXAS21002C::readByte(int readRegister)
 }
 
 
-int FXAS21002C::readWord(int readRegister)
+int FXAS21002C::readWord(u_int16_t readRegister)
 {
-    int toReturn = i2c_smbus_read_word_data(kI2CFileDescriptor, readRegister);
+    u_int16_t toReturn = i2c_smbus_read_word_data(kI2CFileDescriptor, readRegister);
     if (toReturn < 0) {
         printf("FXAS21002C Read Byte error: %d",errno) ;
 	error = errno ;
@@ -141,9 +141,9 @@ int FXAS21002C::writeValue(int writeValue)
 }
 
 
-int FXAS21002C::writeByte(int writeRegister, int writeValue)
+int FXAS21002C::writeByte(u_int8_t writeRegister, u_int16_t writeValue)
 {   
-	int toReturn = i2c_smbus_write_byte_data(kI2CFileDescriptor, writeRegister, writeValue);
+	u_int8_t toReturn = i2c_smbus_write_byte_data(kI2CFileDescriptor, writeRegister, writeValue);
 	if (toReturn < 0) {
 		printf("FXAS21002C_ADDRESS Write Byte error: %d",errno) ;
 		error = errno ;
@@ -163,8 +163,8 @@ int16_t FXAS21002C::getX(void)
 {
 	u_int8_t data[2];
 	int16_t value;
-	data[0] = readByte(REG_OUT_X_MSB);
-	data[1] = readByte(REG_OUT_X_LSB);
+        data[0] = i2c_smbus_read_byte_data(kI2CFileDescriptor, REG_OUT_X_MSB);	
+        data[1] = i2c_smbus_read_byte_data(kI2CFileDescriptor, REG_OUT_X_LSB);	
 	value = (data[0] << 8) | data[1];
 	return(value);
 }
@@ -173,9 +173,9 @@ int16_t FXAS21002C::getY(void)
 {
         u_int8_t data[2];
         int16_t value;
-        data[0] = readByte(REG_OUT_Y_MSB);
-        data[1] = readByte(REG_OUT_Y_LSB);
-        value = (data[0] << 8) | data[1];
+        data[0] = i2c_smbus_read_byte_data(kI2CFileDescriptor, REG_OUT_Y_MSB);
+        data[1] = i2c_smbus_read_byte_data(kI2CFileDescriptor, REG_OUT_Y_LSB);	
+	value = (data[0] << 8) | data[1];
         return(value);
 }
 
@@ -183,8 +183,8 @@ int16_t FXAS21002C::getZ(void)
 {
         u_int8_t data[2];
         int16_t value;
-        data[0] = readByte(REG_OUT_Z_MSB);
-        data[1] = readByte(REG_OUT_Z_LSB);
+        data[0] = i2c_smbus_read_byte_data(kI2CFileDescriptor, REG_OUT_Z_MSB);        
+	data[1] = i2c_smbus_read_byte_data(kI2CFileDescriptor, REG_OUT_Z_LSB);
         value = (data[0] << 8) | data[1];
         return(value);
 }

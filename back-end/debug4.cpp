@@ -26,21 +26,28 @@ int main()
 	    printf("Error: %d", test->error);
 	    printf("/n");			
     }else{
-            std::cout << "test" << " " << std::endl;
-	    test->activate(false);
-	    test->ready(false);
-	    sleep(1);
-	    u_int8_t status = test->getStatus();
-	    std::cout << unsigned(status)<< " test status" << std::endl;
+	    test->activate(true);
+	    std::cout << "test" << " " << std::endl;
+	    for (int i = 0; i < 5; i++) 
+	    {
+	    	sleep(1);
+	    	u_int8_t status = test->getStatus();
+	    	std::cout << unsigned(status)<< " test status" << std::endl;
 
             
-	    status = test->getStatus();
-	    std::cout << unsigned(status)<< " reg value" << std::endl;
+	    	u_int16_t x = test->getX();
+	    	std::cout << unsigned(x)<< " reg value" << std::endl;
+            
+	   	u_int16_t y = test->getY();
+		std::cout << unsigned(y)<< " reg value" << std::endl;
+        	    
+		u_int16_t z = test->getZ();
+		std::cout << unsigned(z)<< " reg value" << std::endl;
 
-
-	    status = test->getStatus();
-	    std::cout << unsigned(status)<< " reg value" << std::endl;
-	    sleep(1);
+		status = test->getStatus();
+		std::cout << unsigned(status)<< " reg value" << std::endl;
+	    	sleep(1);
+	    }
     }
     
     test->closeFXAS21002C();

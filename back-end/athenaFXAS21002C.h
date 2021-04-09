@@ -168,13 +168,13 @@ public:
     void getSensor(sensor_t* sensor);
     void getEvent(sensors_event_t *event);
     // Read the given register
-    int readByte(int readRegister);
-    int readWord(int readRegister);
+    int readByte(u_int8_t readRegister);
+    int readWord(u_int16_t readRegister);
     int readBlock(int readRegister);
 
     // Write the the given value to the given register
     int writeValue(int writeValue);
-    int writeByte(int writeRegister, int writeValue);
+    int writeByte(u_int8_t writeRegister, u_int16_t writeValue);
     int getError();
     gyroRawData_t raw;
 
