@@ -31,7 +31,7 @@ int main()
 
     int err = pca9685->openPCA9685();
     
-    if (err < 0)
+    if (err == 0)
     {
         printf("Error: %d", pca9685->error);
 	printf("/n");

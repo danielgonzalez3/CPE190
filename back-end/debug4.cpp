@@ -11,23 +11,24 @@
 #include <athenaFXAS21002C.h>
 #include "athenaGPIO.h"
 
-// Calibrated for a Robot Geek RGS-13 Servo
-// Make sure these are appropriate for the servo being used!
-// #define TCA_CHANNEL_0 0x1
-// #define TCA_CHANNEL_1 0x2
-// #define TCA_CHANNEL_2 0x4
 int main() 
 {
     FXAS21002C *test = new FXAS21002C();
     int err = test->openFXAS21002C();
-    //int test_addr = 0x4;
-    if (err < 0)
+    if (err <= 0)
     {
 	    printf("Error: %d", test->error);
 	    printf("/n");			
     }else{
+            test->writeByte(GYRO_REGISTER_CTRL_REG1, 0x00);
+            test->writeByte(GYRO_REGISTER_CTRL_REG1, (1 << 6));
+	    test->writeByte(GYRO_REGISTER_CTRL_REG0, 0x03); // GYRO_RANGE_250DPS
+	    test->writeByte(GYRO_REGISTER_CTRL_REG0, 0x0E);
 	    test->activate(true);
-	    std::cout << "test" << " " << std::endl;
+	    u_int8_t whoami;
+            whoami = test->readByte(GYRO_REGISTER_WHO_AM_I);
+	    std::cout << "whoami: " << unsigned(whoami) << std::endl;
+
 	    for (int i = 0; i < 5; i++) 
 	    {
 	    	sleep(1);
@@ -47,6 +48,10 @@ int main()
 		status = test->getStatus();
 		std::cout << unsigned(status)<< " reg value" << std::endl;
 	    	sleep(1);
+		//test->writeByte(GYRO_REGISTER_CTRL_REG1, 0x00);
+		//test->writeByte(GYRO_REGISTER_CTRL_REG1, (1 << 6));
+		//test->writeByte(GYRO_REGISTER_CTRL_REG0, 0x01); // GYRO_RANGE_250DPS 
+		//test->writeByte(GYRO_REGISTER_CTRL_REG0, 0x0E);
 	    }
     }
     
