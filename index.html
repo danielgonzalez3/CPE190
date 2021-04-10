@@ -17,7 +17,7 @@ input[type=text], input[type=password] {
 
 /* Style for all buttons */
 button {
-  background-color: #2253c1;
+  background-color: #115740;
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -49,7 +49,7 @@ button:hover {
 
 img.avatar {
   width: 40%;
-  border-radius: 50%;
+
 }
 
 .container {
@@ -63,6 +63,7 @@ span.psw {
 
 /* The Modal (background) */
 .modal {
+
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
@@ -78,9 +79,23 @@ span.psw {
 
 .modal-content {
   background-color: #fefefe;
-  margin: 5% auto 15% auto; 
+  margin: 5% auto 15% auto;
   border: 1px solid #888;
-  width: 80%; 
+  width: 80%;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+  border-radius: 90%;
+}
+
+.bottom {
+  position:absolute;
+  bottom:0;
+  right:0;
 }
 
 /* Close Button*/
@@ -106,12 +121,12 @@ span.psw {
 }
 
 @-webkit-keyframes animatezoom {
-  from {-webkit-transform: scale(0)} 
+  from {-webkit-transform: scale(0)}
   to {-webkit-transform: scale(1)}
 }
-  
+
 @keyframes animatezoom {
-  from {transform: scale(0)} 
+  from {transform: scale(0)}
   to {transform: scale(1)}
 }
 
@@ -129,18 +144,26 @@ span.psw {
 </head>
 <body>
 
-<h2 align="center">Project Athena Login</h2>
+
+
+<h2 align="center" style="color:#115740;font-size:40px;">Project Athena Login</h2>
 
 <div class="horizontal-center">
   <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
 </div>
 
+
+<img src="./front-end/CAD.png" class="center">
+<img src="./front-end/CSUSlogo.png" class="bottom">
+
+
+
 <div id="id01" class="modal">
-  
+
   <form class="modal-content animate" action="action_page.php" method="post">
     <div class="imgcontainer">
       <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-      <img src="front-end/tmp.png" alt="Avatar" class="avatar">
+      <img src="./front-end/loginLogo.png" alt="Avatar" class="avatar">
     </div>
 
     <div class="container">
@@ -149,7 +172,7 @@ span.psw {
 
       <label for="psw"><b>Password</b></label>
       <input type="password" placeholder="Enter Password" name="psw" required>
-        
+
       <button type="submit">Login</button>
       <label>
         <input type="checkbox" checked="checked" name="remember"> Remember me
