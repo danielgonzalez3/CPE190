@@ -17,41 +17,36 @@ int main()
     int err = test->openFXAS21002C();
     if (err <= 0)
     {
-	    printf("Error: %d", test->error);
-	    printf("/n");			
+	    printf("\nError: %d", test->error);
     }else{
-            test->writeByte(GYRO_REGISTER_CTRL_REG1, 0x00);
-            test->writeByte(GYRO_REGISTER_CTRL_REG1, (1 << 6));
-	    test->writeByte(GYRO_REGISTER_CTRL_REG0, 0x03); // GYRO_RANGE_250DPS
-	    test->writeByte(GYRO_REGISTER_CTRL_REG0, 0x0E);
-	    test->activate(true);
 	    u_int8_t whoami;
             whoami = test->readByte(GYRO_REGISTER_WHO_AM_I);
 	    std::cout << "whoami: " << unsigned(whoami) << std::endl;
-
-	    for (int i = 0; i < 5; i++) 
+	    test->activate(true);
+	    for (int i = 0; i < 50; i++) 
 	    {
+                //test->activate(true);		    
 	    	sleep(1);
-	    	u_int8_t status = test->getStatus();
-	    	std::cout << unsigned(status)<< " test status" << std::endl;
+	    	//u_int8_t status = test->getStatus();
+	    	//std::cout << unsigned(status)<< "status" << std::endl;
 
             
 	    	u_int16_t x = test->getX();
-	    	std::cout << unsigned(x)<< " reg value" << std::endl;
+		float x_value = x * GYRO_SENSITIVITY_2000DPS * SENSORS_DPS_TO_RADS;
+	    	std::cout << x_value << " ->x" << std::endl;
             
 	   	u_int16_t y = test->getY();
-		std::cout << unsigned(y)<< " reg value" << std::endl;
+		float y_value = y * GYRO_SENSITIVITY_2000DPS * SENSORS_DPS_TO_RADS;
+		std::cout << y_value << " ->y" << std::endl;
         	    
 		u_int16_t z = test->getZ();
-		std::cout << unsigned(z)<< " reg value" << std::endl;
-
-		status = test->getStatus();
-		std::cout << unsigned(status)<< " reg value" << std::endl;
-	    	sleep(1);
-		//test->writeByte(GYRO_REGISTER_CTRL_REG1, 0x00);
-		//test->writeByte(GYRO_REGISTER_CTRL_REG1, (1 << 6));
-		//test->writeByte(GYRO_REGISTER_CTRL_REG0, 0x01); // GYRO_RANGE_250DPS 
-		//test->writeByte(GYRO_REGISTER_CTRL_REG0, 0x0E);
+	        float z_value = z * GYRO_SENSITIVITY_2000DPS * SENSORS_DPS_TO_RADS;	
+		std::cout << z_value << " ->z" << std::endl;
+		
+		std::cout << "------------" << std::endl;
+	    	
+		//sleep(1);
+                test->activate(false);		
 	    }
     }
     
