@@ -1,20 +1,89 @@
 <!--CPE 190 Project */-->
 <html>
 <style>
-	div.controls {
-	  position: absolute;
-	  right:150px;
-	  width: 480px;
-	  height: 360px;
-	  border: 2px solid white;
-	}
-	div.video {
-	  position: absolute;
-	  left:150px;
-	  width: 480px;
-	  height: 360px;
-	  border: 2px solid white
-	}
+div.controls {
+  display: inline-block;
+  vertical-align:top;
+  width: 480px;
+  height: 360px;
+  border: 2px solid white;
+}
+div.logo {
+  display: inline-block;
+  vertical-align:top;
+  width: 480px;
+  height: 360px;
+  border: 2px solid white;
+}
+div.title {
+  display: inline-block;
+  width: 480px;
+  height: 360px;
+  border: 2px solid white;
+}
+div.video {
+  display: inline-block;
+  width: 480px;
+  height: 360px;
+  border: 2px solid white
+}
+
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.button {
+
+  padding: 15px 25px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+
+.button:hover {background-color: #3e8e41}
+
+.button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.button2 {
+
+  padding: 15px 25px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #f4511e;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+.button2:hover {background-color: red}
+
+.button2:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+
 </style>
 <head>
 <title>Project</title>
@@ -23,38 +92,56 @@
 </head>
 <body>
 <div class="container">
-	<h1 align="center">Project Athena V1.3
-        <img src="shield.png" alt="Shield" align="center" style="width:48px;height:60px;">
+	<h1 style="background-color: #115740;border:3px; border-style:solid; border-color:#115740;" align="center">Project Athena Control UI
     </h1>
 	<div class="jumbotron">
 		<font size="5">
+			<div class="title">
+				<h2 alt="title" align="center" style="width:450px;height:355px;">Welcome to Project Athena - CSUS Senior Design
+					<br><br>
+					<a href="sendData.php?state=5" style="background:none;border:none;color:transparent" class="btn btn-primary" >
+					<button class="button" href="a" >Initialize</button>
+					</a>
+					<a href="sendData.php?state=6" style="background:none;border:none;color:transparent" class="btn btn-primary" >
+					<button class="button2" href="a" >Shutdown</button>
+				</a>
+				</h2>
+			</div>
+			<div class="logo">
+				<img src="tmp.png"; alt="logo" class="center" align="center" style="width:505px;height:340px;margin-top:25px;">
+			</div>
+			<br><br/>
 			<div class="video">
 				<video width="475px" height="355px"  src="http://10.0.0.187:5000" autoplay type="video/ogg; codecs=theora"></video>
 			</div>
 			<div class="controls">
-				<img src="control.png"; alt="control" align="center" style="width:475px;height:355px;">
+				<img src="dpad.png"; alt="control" class="center" style="width:270px;margin-top:25px;height:270px;">
+
 				<b1 class="button_up">
 					<div class="btn-group btn-group-justified">
-						<a href="sendData.php?state=1" style="display:block;width:40px;height:40px;background:transparent;border:none;color:transparent;margin-left: 65px" class="btn btn-primary"></a>
+						<a href="sendData.php?state=1" style="display:block;width:55px;height:55px;background:transparent;border:none;color:transparent" class="btn btn-primary"></a>
 					</div>
 				</b1>
+
 				<b2 class="button_left">
 					<div class="btn-group btn-group-justified">
-						<a href="sendData.php?state=4" style="display:block;width:40px;height:40px;background:transparent;border:none;color:transparent;margin-left: 65px;margin-top :-20px" class="btn btn-primary"></a>
+						<a href="sendData.php?state=4" style="display:block;width:55px;height:55px;background:transparent;border:none;color:transparent" class="btn btn-primary"></a>
 					</div>
 				</b2>
+
 				<b3 class="button_right">
 					<div class="btn-group btn-group-justified">
-						<a href="sendData.php?state=2" style="display:block;width:40px;height:40px;background:transparent;border:none;color:transparent;margin-left: 65px;margin-top :-20px" class="btn btn-primary"></a>
+						<a href="sendData.php?state=2" style="display:block;width:55px;height:55px;background:transparent;border:none;color:transparent" class="btn btn-primary"></a>
 					</div>
 				</b3>
+
 				<b4 class="button_down">
 					<div class="btn-group btn-group-justified">
-						<a href="sendData.php?state=3" style="display:block;width:40px;height:40px;background:transparent;border:none;color:transparent;margin-left: 65px;margin-top :-35px" class="btn btn-primary"></a>
+						<a href="sendData.php?state=3" style="display:block;width:55px;height:55px;background:transparent;border:none;color:transparent" class="btn btn-primary"></a>
 					</div>
 				</b4>
+
 			</div>
-			<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 		</font>
     </div>
 </div>
