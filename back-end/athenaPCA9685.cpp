@@ -100,20 +100,20 @@ void PCA9685::setPWM_ANGLE (int angle, int L, int R){
 void PCA9685::setPWM_ANGLE_60KG (int angle, int L, int R){
     if (angle == 0) {
         L = (.5 + ((204.8 * L) / 1000));
-        setPWM(1, 0, L);
+        setPWM(11, 0, L);
     } else if (angle == 180) {
         R = (.5 + ((204.8 * R) / 1000));
-        setPWM(1, 0, R);
+        setPWM(11, 0, R);
     } else if (angle == 90) {
         int Center = (L + R)/2;
         int M = (.5 + ((204.8 * Center) / 1000));
-        setPWM(1, 0, M);
+        setPWM(11, 0, M);
     } else {
         int Center = (L + R)/2;
         int M = (.5 + ((204.8 * Center) / 1000));
         R = (.5 + ((204.8 * R) / 1000));
         int PWM = (2 * M) - R + (.5 + (static_cast<float>((R - M)) / 90) * angle);
-        setPWM(1, 0, PWM);
+        setPWM(11, 0, PWM);
     }
 
 }

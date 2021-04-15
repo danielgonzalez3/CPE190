@@ -39,9 +39,18 @@ int main()
 	
     }else{
 	//pca9685->reset();
-        sleep(2);	
+        
+	/*sleep(2);	
 	pca9685->setAllPWM(0,0);
-
+        std::cout<<"135 DEGREES"<<std::endl;
+        pca9685->setPWM_ANGLE_60KG(135, servoMin_20, servoMax_20);
+	sleep(3);
+	pca9685->setPWM_ANGLE_60KG(70, servoMin_20, servoMax_20);
+	sleep(3);
+	pca9685->setPWM_ANGLE_60KG(135, servoMin_20, servoMax_20);
+	sleep(3);*/
+	
+	/*
         std::cout<<"135 DEGREES"<<std::endl;	
         pca9685->setPWM_ANGLE(135, servoMin_20, servoMax_20);
         pca9685->setPWM_ANGLE_60KG(135, servoMin_60, servoMax_60);
@@ -77,33 +86,35 @@ int main()
         pca9685->setPWM_ANGLE(135, servoMin_20, servoMax_20);	
 	pca9685->setPWM_ANGLE_60KG(135, servoMin_60, servoMax_60);
 	sleep(2);
+	*/
 
-
-
+	// MOTOR STUFF
 	//pca9685->setPWM(0, 2048, 0);
-	/*
         pca9685->setAllPWM(0,0);
-	jetsonGPIONumber M1_0 = gpio7;
-	jetsonGPIONumber M1_1 = gpio15;
+	jetsonGPIONumber M1_0 = gpio32;
+	jetsonGPIONumber M1_1 = gpio33;
 	gpioExport(M1_0);
 	gpioExport(M1_1);
 	gpioSetDirection(M1_0, outputPin);
 	gpioSetDirection(M1_1, outputPin);
-        pca9685->reset();	
-	pca9685->setPWM(0,0,servoMin);
+        pca9685->setPWM(0,0, 2320);	
+        pca9685->setPWM(1,0, 2320);	
+        pca9685->setPWM(2,0, 2320);	
+	pca9685->setPWM(3,0, 2320);
+	gpioSetValue(M1_0, 0);
 	gpioSetValue(M1_0, 1);
 	sleep(7);
-	gpioSetValue(M1_0, 0);
 	gpioSetValue(M1_1, 0);
 	pca9685->setPWM(0,0,0);
 	gpioUnexport(M1_0);
-	gpioUnexport(M1_1);*/
+	gpioUnexport(M1_1);
+    	
 
+ 	std::cout << "turning All PWM to Zero\n" << std::endl;
+    	pca9685->setAllPWM(0,0);
+    	sleep(3);
+    	pca9685->reset();sleep(2);
+    	std::cout << "closing..." << std::endl;
+    	pca9685->closePCA9685();
     }
-    std::cout << "turning All PWM to Zero\n" << std::endl;
-    pca9685->setAllPWM(0,0);    
-    sleep(2);
-    //pca9685->reset();
-    std::cout << "closing..." << std::endl;
-    pca9685->closePCA9685();
 }
