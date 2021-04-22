@@ -16,19 +16,19 @@ enum pinDirections {
 enum pinValues {
     low = 0,
     high = 1,
-    off = 0,  // synonym for things like lights
+    off = 0,
     on = 1
 }  ;
 
 
 enum jetsonGPIONumber {
-       gpio7  = 436, //Motor1 
+       gpio7  = 436,
        gpio15 = 268,
-       gpio29 = 421, //Motor2
+       gpio29 = 421,
        gpio31 = 422,
-       gpio32 = 424, //Motor3
+       gpio32 = 424,
        gpio33 = 393,
-       gpio19 = 493, //Motor4
+       gpio19 = 493,
        gpio21 = 492,  
 } ;
 

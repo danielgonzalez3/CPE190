@@ -11,8 +11,6 @@
 #include <athenaPCA9685.h>
 #include "athenaGPIO.h"
 
-// Calibrated for a Robot Geek RGS-13 Servo
-// Make sure these are appropriate for the servo being used!
 
 int servoMin_20 = 1564;
 int servoMax_20 = 6756;
@@ -20,36 +18,76 @@ int servoMax_20 = 6756;
 int servoMin_60 = 1780;
 int servoMax_60 = 7250;
 
-// M1: 7 - 15
-// M2: 29 - 31
-// M3: 32 - 33
-// m4: 19 - 21
-   
+// M0: 19 - 21
+// M1: 32 - 33 
+// M2: 7  - 15
+// M3: 29 - 31
+int getkey() {
+    int character;
+    struct termios orig_term_attr;
+    struct termios new_term_attr;
+
+    /* set the terminal to raw mode */
+    tcgetattr(fileno(stdin), &orig_term_attr);
+    memcpy(&new_term_attr, &orig_term_attr, sizeof(struct termios));
+    new_term_attr.c_lflag &= ~(ECHO|ICANON);
+    new_term_attr.c_cc[VTIME] = 0;
+    new_term_attr.c_cc[VMIN] = 0;
+    tcsetattr(fileno(stdin), TCSANOW, &new_term_attr);
+
+    /* read a character from the stdin stream without blocking */
+    /*   returns EOF (-1) if no character is available */
+    character = fgetc(stdin);
+
+    /* restore the original terminal attributes */
+    tcsetattr(fileno(stdin), TCSANOW, &orig_term_attr);
+
+    return character;
+}
 int main() 
 {
-    PCA9685 *pca9685 = new PCA9685();
+    PCA9685 *pca9685  = new PCA9685((int)0x70);
+//    PCA9685 *pca9685_2 = new PCA9685((int)0x41);
 
     int err = pca9685->openPCA9685();
-    
-    if (err == 0)
+//    int err2 = pca9685_2->openPCA9685();
+
+    if (err == 0 || getkey() == 27)
     {
         printf("Error: %d", pca9685->error);
-	printf("/n");
-	std::cout<<"wtf"<<std::endl;
+	//printf("Error: %d", pca9685_2->error);
+	printf("\n");
 	
     }else{
-	//pca9685->reset();
+	printf("\nPCA9685 Device Address: 0x%02X\n",pca9685->kI2CAddress);
+	//printf("\nPCA9685 Device Address: 0x%02X\n",pca9685_2->kI2CAddress);
+	std::cout << "\nRESET BOTH PCA\n" << std::endl;
         
-	/*sleep(2);	
 	pca9685->setAllPWM(0,0);
-        std::cout<<"135 DEGREES"<<std::endl;
-        pca9685->setPWM_ANGLE_60KG(135, servoMin_20, servoMax_20);
-	sleep(3);
-	pca9685->setPWM_ANGLE_60KG(70, servoMin_20, servoMax_20);
-	sleep(3);
-	pca9685->setPWM_ANGLE_60KG(135, servoMin_20, servoMax_20);
-	sleep(3);*/
+	sleep(2);
+	pca9685->reset();
 	
+	//pca9685_2->setAllPWM(0,0);
+	//sleep(2);
+	//pca9685_2->reset();
+	
+	sleep(2);
+	pca9685->setPWM_ANGLE(3, 135, servoMin_20, servoMax_20);
+        sleep(3);
+        pca9685->setPWM_ANGLE(3, 100, servoMin_20, servoMax_20);	
+        sleep(3);
+	pca9685->setPWM_ANGLE(3, 135, servoMin_20, servoMax_20);
+        sleep(3);		
+
+	/*
+        pca9685->setPWM_ANGLE_60KG(135, servoMin_60, servoMax_60);
+	sleep(3);
+	pca9685->setPWM_ANGLE_60KG(70, servoMin_60, servoMax_60);
+	sleep(3);
+	pca9685->setPWM_ANGLE_60KG(135, servoMin_60, servoMax_60);
+	sleep(3);
+	*/
+
 	/*
         std::cout<<"135 DEGREES"<<std::endl;	
         pca9685->setPWM_ANGLE(135, servoMin_20, servoMax_20);
@@ -88,33 +126,40 @@ int main()
 	sleep(2);
 	*/
 
-	// MOTOR STUFF
-	//pca9685->setPWM(0, 2048, 0);
-        pca9685->setAllPWM(0,0);
-	jetsonGPIONumber M1_0 = gpio32;
-	jetsonGPIONumber M1_1 = gpio33;
+	/* MOTOR STUFF
+	
+	jetsonGPIONumber M1_0 = gpio29;
+	jetsonGPIONumber M1_1 = gpio31;
+	
 	gpioExport(M1_0);
 	gpioExport(M1_1);
 	gpioSetDirection(M1_0, outputPin);
 	gpioSetDirection(M1_1, outputPin);
-        pca9685->setPWM(0,0, 2320);	
-        pca9685->setPWM(1,0, 2320);	
-        pca9685->setPWM(2,0, 2320);	
-	pca9685->setPWM(3,0, 2320);
-	gpioSetValue(M1_0, 0);
+        gpioSetValue(M1_0, 0);
+        gpioSetValue(M1_1, 0);        
+   	sleep(2);	
+	pca9685->setPWM(14, 0, 1520);
+        sleep(2);
 	gpioSetValue(M1_0, 1);
-	sleep(7);
-	gpioSetValue(M1_1, 0);
-	pca9685->setPWM(0,0,0);
+
+	sleep(12);
+	gpioSetValue(M1_0, 0);
 	gpioUnexport(M1_0);
 	gpioUnexport(M1_1);
-    	
-
- 	std::cout << "turning All PWM to Zero\n" << std::endl;
-    	pca9685->setAllPWM(0,0);
-    	sleep(3);
-    	pca9685->reset();sleep(2);
+	*/
+	
+	
+ 	std::cout << "turning All PCA 1 PWM to Zero\n" << std::endl;
+	pca9685->setAllPWM(0,0);
+        sleep(2);
+        std::cout << "turning All PCA 2 PWM to Zero\n" << std::endl;	
+	//pca9685_2->setAllPWM(0,0);
+    	sleep(2);
     	std::cout << "closing..." << std::endl;
     	pca9685->closePCA9685();
+        sleep(2);        
+	//pca9685_2->closePCA9685();
+//	sleep(2);
     }
+
 }

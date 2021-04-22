@@ -36,7 +36,7 @@ public:
     // Channels 0-15, Channels are in sets of 4 bytes
     void setPWM (int channel, int onValue, int offValue);
     
-    void setPWM_ANGLE (int angle, int L, int R);
+    void setPWM_ANGLE (int channel, int angle, int L, int R);
     
     void setPWM_ANGLE_60KG (int angle, int L, int R);
     

@@ -2,7 +2,7 @@
 #include <math.h>
 
 FXOS8700::FXOS8700(int address) {
-    kI2CBus = 1;        // Default I2C
+    kI2CBus = 8;        // Default I2C
     kI2CAddress = 0x1F; // Defaults to 0x1F
     error = 0;
 }

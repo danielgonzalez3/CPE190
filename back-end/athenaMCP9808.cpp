@@ -8,7 +8,7 @@
 #include <fcntl.h>
 
 MCP9808::MCP9808(int address) {
-    kI2CBus = 1;           
+    kI2CBus = 8;           
     kI2CAddress = address; 
     error = 0;
 }
@@ -75,7 +75,7 @@ int MCP9808::writeByte(int writeRegister, int writeValue)
 float MCP9808::readTempF() {
     float temp = NAN;
     int file;
-    const char *bus = "/dev/i2c-1";
+    const char *bus = "/dev/i2c-8";
     if ((file = open(bus, O_RDWR)) < 0) {
     	printf("Temp Sensor Broken. \n");
 	exit(1);

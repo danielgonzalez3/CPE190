@@ -2,7 +2,7 @@
 #include <math.h>
 
 FXAS21002C::FXAS21002C(int address) {
-    kI2CBus = 1;        // Default I2C
+    kI2CBus = 8;        // Default I2C
     kI2CAddress = 0x21; // Defaults to 0x1F
     error = 0;
     rng = GYRO_RANGE_2000DPS; // DPS
