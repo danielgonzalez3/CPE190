@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <time.h>
+#include <cstring>
 #include <sys/time.h> //Might not need
 #include <iostream>
 #include <string>
@@ -22,18 +23,46 @@
 #include <athenaMCP9808.h>
 #include "athenaGPIO.h"
 
-// Motor Variables ["01" -> Foward | "10" -> Backwards] 
-extern const jetsonGPIONumber M1_0 = gpio7;
-extern const jetsonGPIONumber M1_1 = gpio15;
+// Motor Variables ["10" -> Foward | "01" -> Backwards] 
+extern const int servoMin_20 = 1564;
+extern const int servoMax_20 = 6756;
 
-extern const jetsonGPIONumber M2_0 = gpio29;
-extern const jetsonGPIONumber M2_1 = gpio31;
+extern const int servoMin_60 = 1780;
+extern const int servoMax_60 = 7250;
 
-extern const jetsonGPIONumber M3_0 = gpio32;
-extern const jetsonGPIONumber M3_1 = gpio33;
+int M0 = 15; // FRONT LEFT
+int M1 = 14; // FRONT RIGHT
+int M2 = 13; // BACK  LEFT
+int M3 = 12; // BACK  RIGHT
 
-extern const jetsonGPIONumber M4_0 = gpio19;
-extern const jetsonGPIONumber M4_1 = gpio21;
+extern const jetsonGPIONumber M0_F = gpio33;
+extern const jetsonGPIONumber M0_B = gpio32;
+
+extern const jetsonGPIONumber M1_F = gpio29;
+extern const jetsonGPIONumber M1_B = gpio31;
+
+extern const jetsonGPIONumber M2_F = gpio7;
+extern const jetsonGPIONumber M2_B = gpio15;
+
+extern const jetsonGPIONumber M3_F = gpio21;
+extern const jetsonGPIONumber M3_B = gpio19;
+
+extern const int L0_0 = 6; // BOT
+extern const int L0_1 = 7; // MID
+extern const int L0_2 = 8; // TOP
+
+extern const int L1_0 = 5;
+extern const int L1_1 = 4;
+extern const int L1_2 = 3;
+
+extern const int L2_0 = 11;
+extern const int L2_1 = 10;
+extern const int L2_2 = 9;
+
+extern const int L3_0 = 0;
+extern const int L3_1 = 1;
+extern const int L3_2 = 2;
+
 
 using namespace std;
 string getFile(string filename);                         
@@ -44,13 +73,9 @@ int oldtime      = 0;
 int newtime      = 0;
 int t_delta      = 0;
 int t_pivot      = 0;
-int baseFreq     = 1000;
-int servoMin_20  = 700;
-int servoMax_20  = 1200;
-int servoMin_60  = 700;
-int servoMax_60  = 1200;
+int baseFreq     = 1100;
 int temp_mcp     = -1;
-PCA9685 *pca9685 = new PCA9685();
+PCA9685 *pca9685  = new PCA9685((int)0x70);
 MCP9808 *mcp9808 = new MCP9808();
 
 // Signal Clean Up Process
@@ -62,56 +87,81 @@ void signal_clean_up(int signum)
 	pca9685->setAllPWM(0,0);
 	pca9685->reset();
 	pca9685->closePCA9685();
-        mcp9808->closemcp9808();
-	gpioSetValue(M1_0, 0);
-	gpioSetValue(M1_1, 0);
-	gpioSetValue(M2_0, 0);
-	gpioSetValue(M2_1, 0);
-	gpioSetValue(M3_0, 0);
-	gpioSetValue(M3_1, 0);
-	gpioSetValue(M4_0, 0);
-	gpioSetValue(M4_1, 0);
-	gpioUnexport(M1_0);
-	gpioUnexport(M1_1);
-	gpioUnexport(M2_0);
-	gpioUnexport(M2_1);
-	gpioUnexport(M3_0);
-	gpioUnexport(M3_1);
-	gpioUnexport(M4_0);
-	gpioUnexport(M4_1);
+        mcp9808->closeMCP9808();
+	gpioSetValue(M0_F, 0);
+	gpioSetValue(M0_B, 0);
+	gpioSetValue(M1_F, 0);
+	gpioSetValue(M1_B, 0);
+	gpioSetValue(M2_F, 0);
+	gpioSetValue(M2_B, 0);
+	gpioSetValue(M3_F, 0);
+	gpioSetValue(M3_B, 0);
+	gpioUnexport(M0_F);
+	gpioUnexport(M0_B);
+	gpioUnexport(M1_F);
+	gpioUnexport(M1_B);
+	gpioUnexport(M2_F);
+	gpioUnexport(M2_B);
+	gpioUnexport(M3_F);
+	gpioUnexport(M3_B);
 	exit(signum);
 }
-int map ( int x, int in_min, int in_max, int out_min, int out_max)
-{
-	return  (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min ;
+
+int getkey() {
+    int character;
+    struct termios orig_term_attr;
+    struct termios new_term_attr;
+
+    // Terminal raw mode
+    tcgetattr(fileno(stdin), &orig_term_attr);
+    std::memcpy(&new_term_attr, &orig_term_attr, sizeof(struct termios));
+    new_term_attr.c_lflag &= ~(ECHO|ICANON);
+    new_term_attr.c_cc[VTIME] = 0;
+    new_term_attr.c_cc[VMIN] = 0;
+    tcsetattr(fileno(stdin), TCSANOW, &new_term_attr);
+
+    // read a character from the stdin stream without blocking */
+    // returns EOF (-1) if no character is available */
+    character = fgetc(stdin);
+
+    tcsetattr(fileno(stdin), TCSANOW, &orig_term_attr);
+
+    return character;
 }
 
 int main(int argc, char **argv) 
 {
-	gpioExport(M1_0);
-	gpioExport(M1_1);
-	gpioExport(M2_0);
-	gpioExport(M2_1);
-	gpioExport(M3_0);
-	gpioExport(M3_1);
-	gpioExport(M4_0);
-	gpioExport(M4_1);
-	gpioSetDirection(M1_0, outputPin);
-	gpioSetDirection(M1_1, outputPin);
-	gpioSetDirection(M2_0, outputPin);
-	gpioSetDirection(M2_1, outputPin);
-	gpioSetDirection(M3_0, outputPin);
-	gpioSetDirection(M3_1, outputPin);
-	gpioSetDirection(M4_0, outputPin);
-	gpioSetDirection(M4_1, outputPin);
+        int err = pca9685->openPCA9685();	
+	gpioExport(M0_F);
+	gpioExport(M0_B);
+	gpioExport(M1_F);
+	gpioExport(M1_B);
+	gpioExport(M2_F);
+	gpioExport(M2_B);
+	gpioExport(M3_F);
+	gpioExport(M3_B);
+	gpioSetDirection(M0_F, outputPin);
+	gpioSetDirection(M0_B, outputPin);
+	gpioSetDirection(M1_F, outputPin);
+	gpioSetDirection(M1_B, outputPin);
+	gpioSetDirection(M2_F, outputPin);
+	gpioSetDirection(M2_B, outputPin);
+	gpioSetDirection(M3_F, outputPin);
+	gpioSetDirection(M3_B, outputPin);
+        gpioSetValue(M0_B, 0);
+        gpioSetValue(M1_B, 0);
+        gpioSetValue(M2_B, 0);
+        gpioSetValue(M3_B, 0);
+        gpioSetValue(M0_F, 0);
+        gpioSetValue(M1_F, 0);
+        gpioSetValue(M2_F, 0);
+        gpioSetValue(M3_F, 0);
 	signal(SIGINT, signal_clean_up);
 	if (getuid() != 0) 
 	{
 		fprintf(stderr, "Program is not started as \'root\' (sudo)\n");
 		return -1;
 	}
-
-	int err = pca9685->openPCA9685();
 	if (err < 0)
 	{
 		printf("Error: %d", pca9685->error); 
@@ -125,27 +175,23 @@ int main(int argc, char **argv)
 	xml.close();
 	while(1) 
 	{	string text = getFile(filename);
-		if(text.substr(0,2) == "-1")
+		if (text.substr(0,2) == "-1")
 		{
-			std::cout << "Waiting for Input..." << std::endl;
-		}else{
+			std::cout << "Waiting for Initialization..." << std::endl;
+		}else{	
 			break;
 		}
 		sleep(2);	
 	}
         std::cout << "\nProject Athena Ready and Running...\n" << '\n' << std::endl;
-	//pca9685->setPWMFrequency(60);
+	pca9685->setAllPWM(0,0);
+	pca9685->reset();
+	sleep(2);
 	while(1) 
 	{
 		usleep(10000); // Minor Delay
 		string text = getFile(filename);
 		int tmp = std::stoi (text.substr(89, 10));	
-		//test here
-		//vector<string> all = getData(text, tag);
-		//end here
-		//cout << text.at(66) << endl;
-		//int tmp = std::stoi (text.substr(0,3),nullptr,0);	      
-		//std::cout << tmp << '\n';
 		if (state == 0)
 		{
 			cout << "States Set" << endl;
@@ -164,130 +210,73 @@ int main(int argc, char **argv)
 			oldtime = newtime;
 			temp_mcp = mcp9808->readTempF();
 			
-
-			// TO-DO Add Servo Movements, Set Servos to Stationary when Foward and Backward. +/-45 Degress for L/R
-			// State 1 - FOWARD
+			// State 1 - FORWARD
 			if (nextState == 1)
 			{
-				std::cout << "STATE: 1 " << "STATE SWITCH: " << t_delta << " SEC " << temp_mcp << " F DEGREES" <<std::endl;
-				gpioSetValue(M1_0, 0);
-				gpioSetValue(M1_1, 1);
-				pca9685->setPWM(0, 0, baseFreq);
-				gpioSetValue(M2_0, 0);
-				gpioSetValue(M2_1, 1);
-				pca9685->setPWM(1, 0, baseFreq);
-				gpioSetValue(M3_0, 0);
-				gpioSetValue(M3_1, 1);
-				pca9685->setPWM(2, 0, baseFreq);
-				gpioSetValue(M4_0, 0);
-				gpioSetValue(M4_1, 1);
-				pca9685->setPWM(3, 0, baseFreq);
-                                pca9685->setPWM(4, 0, 0);
-                                pca9685->setPWM(5, 0, 0);
-				pca9685->setPWM(6, 0, 0);
-                                pca9685->setPWM(7, 0, 0);
-                                pca9685->setPWM(8, 0, 0);
-                                pca9685->setPWM(9, 0, 0);
-                                pca9685->setPWM(10, 0, 0);
-                                pca9685->setPWM(11, 0, 0);
-				pca9685->setPWM(12, 0, 0);
-                                pca9685->setPWM(13, 0, 0);
-                                pca9685->setPWM(14, 0, 0);
-                                pca9685->setPWM(15, 0, 0);
+			        std::cout << "STATE: 1 " << "STATE SWITCH: " << t_delta << " LAST STATE " << state << " SEC "<< temp_mcp << " F DEGREES" <<std::endl;	
+				gpioSetValue(M0_B, 0);
+				gpioSetValue(M1_B, 0);
+				gpioSetValue(M2_B, 0);
+				gpioSetValue(M3_B, 0);
+                                
+				gpioSetValue(M0_F, 1);
+				gpioSetValue(M1_F, 1);
+                                gpioSetValue(M2_F, 0);
+                                gpioSetValue(M3_F, 0);
 
+				pca9685->setPWM(M0, 0, baseFreq);
+                                pca9685->setPWM(M1, 0, baseFreq);
 			}
 			// State 2 - RIGHT
 			if (nextState == 2)
 			{
-				std::cout << "STATE: 2 " << "STATE SWITCH: " << t_delta << " SEC " << temp_mcp << " F DEGREES" <<std::endl;
-				//std::cout << state << std::endl;
-				if(state == 0 || 4) 
-				{
-					gpioSetValue(M1_0, 0);
-					gpioSetValue(M1_1, 1);
-					pca9685->setPWM(0, 0, baseFreq);
-					gpioSetValue(M2_0, 0);
-					gpioSetValue(M2_1, 1);
-					pca9685->setPWM(1, 0, baseFreq);
-					gpioSetValue(M3_0, 0);
-					gpioSetValue(M3_1, 1);
-					pca9685->setPWM(2, 0, baseFreq);
-					gpioSetValue(M4_0, 0);
-					gpioSetValue(M4_1, 1);
-					pca9685->setPWM(3, 0, baseFreq);
-					//pca9685->setPWMFrequency(60);
-					sleep(4);
-					//pca9685->setPWM(11, 0, 1200);
-					pca9685->setPWM(11,0, 140);
-					pca9685->setPWM(10,0, 492);
-					
-					//pca9685->setPWMFrequency(0);
-                                        /*pca9685->setPWM(5, 0, 1500);
-                                        pca9685->setPWM(6, 0, 1500);
-                                        pca9685->setPWM(7, 0, 1500);
-                                        pca9685->setPWM(8, 0, 1500);					
-					pca9685->setPWM(9, 0, 1500);
-					pca9685->setPWM(10, 0, 1500);
-					pca9685->setPWM(11, 0, 1500);
-					pca9685->setPWM(12, 0, 1500);
-					pca9685->setPWM(13, 0, 1500);
-				        pca9685->setPWM(10, 0, 300);
-					pca9685->setPWM(11, 0, 300);
-                                        pca9685->setPWM(12, 0, 300);
-	                                pca9685->setPWM(13, 0, 300);
-					pca9685->setPWM(14, 0, 300);
-					pca9685->setPWM(15, 0, 300);*/                                    
-				}
+                                std::cout << "STATE: 2 " << "STATE SWITCH: " << t_delta << " LAST STATE " << state << " SEC "<< temp_mcp << " F DEGREES" <<std::endl;				
+                                gpioSetValue(M0_B, 0);
+                                gpioSetValue(M1_B, 0);
+                                gpioSetValue(M2_B, 0);
+                                gpioSetValue(M3_B, 0);
+
+                                gpioSetValue(M0_F, 1);
+                                gpioSetValue(M1_F, 0);
+                                gpioSetValue(M2_F, 1);
+                                gpioSetValue(M3_F, 0);
+
+                                pca9685->setPWM(M0, 0, baseFreq);
+                                pca9685->setPWM(M2, 0, baseFreq);			
 			}
-			// State 4 - BACK
+			// State 4 - LEFT
 			if (nextState == 4)
 			{
-				std::cout << "STATE: 4 " << "STATE SWITCH: " << t_delta << " SEC " << temp_mcp << " F DEGREES" <<std::endl;
-				gpioSetValue(M1_0, 1);
-				gpioSetValue(M1_1, 0);
-				pca9685->setPWM(0, 0, baseFreq);
-				gpioSetValue(M2_0, 1);
-				gpioSetValue(M2_1, 0);
-				pca9685->setPWM(1, 0, baseFreq);
-				gpioSetValue(M3_0, 1);
-				gpioSetValue(M3_1, 0);
-				pca9685->setPWM(2, 0, baseFreq);
-				gpioSetValue(M4_0, 1);
-				gpioSetValue(M4_1, 0);
-				pca9685->setPWM(3, 0, baseFreq);
+                                std::cout << "STATE: 4 " << "STATE SWITCH: " << t_delta << " LAST STATE " << state << " SEC "<< temp_mcp << " F DEGREES" <<std::endl;				
+                                gpioSetValue(M0_B, 0);
+                                gpioSetValue(M1_B, 0);
+                                gpioSetValue(M2_B, 0);
+                                gpioSetValue(M3_B, 0);
 
-				pca9685->setPWM(4, 0, 0);
-                                pca9685->setPWM(5, 0, 0);
-				pca9685->setPWM(6, 0, 0);
-                                pca9685->setPWM(7, 0, 0);
-                                pca9685->setPWM(8, 0, 0);  
-                                pca9685->setPWM(9, 0, 0);                                                              
-                                pca9685->setPWM(10, 0, 0); 
-                                pca9685->setPWM(11, 0, 0); 
-                                pca9685->setPWM(12, 0, 0);
-                                pca9685->setPWM(13, 0, 0);
-				pca9685->setPWM(14, 0, 0);
-                                pca9685->setPWM(15, 0, 0);				
+                                gpioSetValue(M0_F, 0);
+                                gpioSetValue(M1_F, 1);
+                                gpioSetValue(M2_F, 0);
+                                gpioSetValue(M3_F, 1);
+
+                                pca9685->setPWM(M1, 0, baseFreq);
+                                pca9685->setPWM(M3, 0, baseFreq);			
 			}
-			// State 3 - LEFT
+			// State 3 - BACK
 			if (nextState == 3)
 			{
-				std::cout << "STATE: 3 " << "STATE SWITCH: " << t_delta << " SEC "<< temp_mcp << " F DEGREES" <<std::endl;
-				if (state == 0 || 4)
-				{
-					gpioSetValue(M1_0, 0);
-					gpioSetValue(M1_1, 1);
-					pca9685->setPWM(0, 0, baseFreq);
-					gpioSetValue(M2_0, 0);
-					gpioSetValue(M2_1, 1);
-					pca9685->setPWM(1, 0, baseFreq);
-					gpioSetValue(M3_0, 0);
-					gpioSetValue(M3_1, 1);
-					pca9685->setPWM(2, 0, baseFreq);
-					gpioSetValue(M4_0, 0);
-					gpioSetValue(M4_1, 1);
-					pca9685->setPWM(3, 0, baseFreq);
-				}
+				std::cout << "STATE: 3 " << "STATE SWITCH: " << t_delta << " LAST STATE" << state << " SEC "<< temp_mcp << " F DEGREES" <<std::endl;
+                                gpioSetValue(M0_B, 0);
+                                gpioSetValue(M1_B, 0);
+                                gpioSetValue(M2_B, 1);
+                                gpioSetValue(M3_B, 1);
+
+                                gpioSetValue(M0_F, 0);
+                                gpioSetValue(M1_F, 0);
+                                gpioSetValue(M2_F, 0);
+                                gpioSetValue(M3_F, 0);
+
+                                pca9685->setPWM(M2, 0, baseFreq);
+                                pca9685->setPWM(M3, 0, baseFreq);			
 			}
 			state = nextState;
 		}
@@ -300,18 +289,39 @@ int main(int argc, char **argv)
 			t_delta = osTime - oldtime;
 			t_delta = (t_delta < 0) ? 0 : t_delta;
 			t_delta = (t_delta > 10) ? 10 : t_delta; 
-			int newFreq = baseFreq + (t_delta*180);
-			//newFreq = 0;
-			if (state == 1 || 2 || 3 || 4)
+			int newFreq = baseFreq + (t_delta*60);
+			
+			/*if (state == 1)
 			{
-				pca9685->setPWM(0, 0, newFreq);
-				pca9685->setPWM(1, 0, newFreq);
-				pca9685->setPWM(2, 0, newFreq);
-				pca9685->setPWM(3, 0, newFreq);
+				pca9685->setPWM(M0, 0, newFreq);
+                                pca9685->setPWM(M1, 0, newFreq);
+                                pca9685->setPWM(M2, 0, newFreq);
+                                pca9685->setPWM(M3, 0, newFreq);
 			}
-
+                        if (state == 2)
+	                {
+				pca9685->setPWM(M0, 0, newFreq);
+		                pca9685->setPWM(M1, 0, 0);
+                                pca9685->setPWM(M2, 0, newFreq);
+                                pca9685->setPWM(M3, 0, 0);		
+			}	
+			if (state == 4)
+                        {
+                                pca9685->setPWM(M0, 0, 0);
+                                pca9685->setPWM(M1, 0, newFreq);
+                                pca9685->setPWM(M2, 0, 0);
+				pca9685->setPWM(M3, 0, newFreq);
+                        }
+                        if (state == 3)
+                        {
+                                pca9685->setPWM(M0, 0, 0);
+                                pca9685->setPWM(M1, 0, newFreq);
+                                pca9685->setPWM(M2, 0, 0);
+                                pca9685->setPWM(M3, 0, newFreq);
+                        }	*/		
 		}
 	}
+
 	return EXIT_SUCCESS;
 }
 string getFile(string filename)

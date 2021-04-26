@@ -39,10 +39,16 @@ void PCA9685::closePCA9685()
 }
 
 void PCA9685::reset () {
-    writeByte(PCA9685_MODE1, PCA9685_ALLCALL );
+    writeByte(PCA9685_MODE1, PCA9685_ALLCALL);
     writeByte(PCA9685_MODE2, PCA9685_OUTDRV) ;
+   
+  /* writeByte(PCA9685_MODE1, PCA9685_RESTART);
+    writeByte(PCA9685_MODE1, PCA9685_SLEEP);
+    writeByte(PCA9685_MODE1, 0x40|0x10);
+    writeByte(PCA9685_MODE1, 0x00);   
+    writeByte(PCA9685_MODE1, PCA9685_ALLCALL); */ 
     // Wait for oscillator to stabilize
-    usleep(5000) ;
+    usleep(5000);
 }
 
 // Sets the frequency of the PWM signal
@@ -66,9 +72,9 @@ void PCA9685::setPWMFrequency ( float frequency ) {
 // Channels 0-15
 // Channels are in sets of 4 bytes
 void PCA9685::setPWM (int channel, int onValue, int offValue) {
-    printf("PCA9685 CHANNEL: 0x%02X\n",channel); 
-    printf("on PWM: %d\n",onValue);
-    printf("off PWM: %d\n\n\n",offValue);   
+    //printf("PCA9685 CHANNEL: 0x%02X\n",channel); 
+    //printf("on PWM: %d\n",onValue);
+    //printf("off PWM: %d\n\n\n",offValue);   
     writeByte(PCA9685_LED0_ON_L+4*channel, onValue & 0xFF) ;
     writeByte(PCA9685_LED0_ON_H+4*channel, onValue >> 8) ;
     writeByte(PCA9685_LED0_OFF_L+4*channel, offValue & 0xFF) ;
@@ -142,13 +148,13 @@ int PCA9685::readByte(int readRegister)
 // Write the the given value to the given register
 int PCA9685::writeByte(int writeRegister, int writeValue)
 {   // For debugging:
-    // printf("Wrote: 0x%02X to register 0x%02X \n",writeValue, writeRegister) ;
+    //printf("Wrote: 0x%02X to register 0x%02X \n",writeValue, writeRegister) ;
     int toReturn = i2c_smbus_write_byte_data(kI2CFileDescriptor, writeRegister, writeValue);
     if (toReturn < 0) {
-        printf("PCA9685 Write Byte error: %d",errno);
-	printf("\n");
-        error = errno ;
-        toReturn = -1 ;
+        printf("PCA9685 Write Byte error: %d\n", errno);
+        printf("Error Code: %d, Reg: %d\n", toReturn, writeRegister);	
+	error = errno;
+        toReturn = -1;
     }
     return toReturn ;
 }
